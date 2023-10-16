@@ -3,7 +3,6 @@ package mx.a01736353.savethebunny;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -39,45 +38,45 @@ public class GameView extends View {
     float rabbitX, rabbitY;
     float oldX;
     float oldRabbitX;
-    ArrayList<Spike> spikes;
+    ArrayList<Trash> trashes;
     ArrayList<Explosion> explosions;
-    
+
     public GameView(
-            Context context){
-        super(context);
-        this.context = context;
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
-        ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
-        rabbit = BitmapFactory.decodeResource(getResources(), R.drawable.rabbit);
-        Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        dWidth = size.x;
-        dHeight = size.y;
-        rectBackground = new Rect(0,0,dWidth,dHeight);
-        rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                invalidate();
+        Context context){
+            super(context);
+            this.context = context;
+            background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
+            ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
+            rabbit = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
+            Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            dWidth = size.x;
+            dHeight = size.y;
+            rectBackground = new Rect(0,0,dWidth,dHeight);
+            rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
+            handler = new Handler();
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    invalidate();
+                }
+            };
+            textPaint.setColor(Color.rgb(255,165,0));
+            textPaint.setTextSize(TEXT_SIZE);
+            textPaint.setTextAlign(Paint.Align.LEFT);
+            textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
+            healthPaint.setColor(Color.GREEN);
+            random = new Random();
+            rabbitX = dWidth/2-rabbit.getWidth()/2;
+            rabbitY = dHeight - ground.getHeight() - rabbit.getHeight();
+            trashes = new ArrayList<>();
+            explosions = new ArrayList<>();
+            for (int i=0; i<3; i++){
+                Trash trash = new Trash(context);
+                trashes.add(trash);
             }
-        };
-        textPaint.setColor(Color.rgb(255,165,0));
-        textPaint.setTextSize(TEXT_SIZE);
-        textPaint.setTextAlign(Paint.Align.LEFT);
-        textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
-        healthPaint.setColor(Color.GREEN);
-        random = new Random();
-        rabbitX = dWidth/2-rabbit.getWidth()/2;
-        rabbitY = dHeight - ground.getHeight() - rabbit.getHeight();
-        spikes = new ArrayList<>();
-        explosions = new ArrayList<>();
-        for (int i=0; i<3; i++){
-            Spike spike = new Spike(context);
-            spikes.add(spike);
         }
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -85,34 +84,34 @@ public class GameView extends View {
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
         canvas.drawBitmap(rabbit, rabbitX, rabbitY, null);
-        for (int i = 0; i<spikes.size();i++){
-            canvas.drawBitmap(spikes.get(i).getSpike(spikes.get(i).spikeFrame),spikes.get(i).spikeX, spikes.get(i).spikeY, null);
-            spikes.get(i).spikeFrame++;
-            if (spikes.get(i).spikeFrame>2){
-                spikes.get(i).spikeFrame = 0;
+        for (int i = 0; i< trashes.size(); i++){
+            canvas.drawBitmap(trashes.get(i).getTrash(trashes.get(i).spikeFrame), trashes.get(i).spikeX, trashes.get(i).spikeY, null);
+            trashes.get(i).spikeFrame++;
+            if (trashes.get(i).spikeFrame>2){
+                trashes.get(i).spikeFrame = 0;
             }
-            spikes.get(i).spikeY += spikes.get(i).spikeVelocity;
+            trashes.get(i).spikeY += trashes.get(i).spikeVelocity;
 
             //Check if bottom of spikes touch the bottom
-            if (spikes.get(i).spikeY + spikes.get(i).getSpikeHeigth()>=dHeight-ground.getHeight()){
+            if (trashes.get(i).spikeY + trashes.get(i).getTrashHeigth()>=dHeight-ground.getHeight()){
                 points +=10;
                 Explosion explosion = new Explosion(context);
-                explosion.explosionX = spikes.get(i).spikeX;
-                explosion.explosionY = spikes.get(i).spikeY;
+                explosion.explosionX = trashes.get(i).spikeX;
+                explosion.explosionY = trashes.get(i).spikeY;
                 explosions.add(explosion);
-                spikes.get(i).resetPosition();
+                trashes.get(i).resetPosition();
             }
 
         }
 
         //Check if collision occurres
-        for (int i=0; i<spikes.size(); i++){
-            if (spikes.get(i).spikeX +spikes.get(i).getSpikeWidth()>=rabbitX
-            && spikes.get(i).spikeX <= rabbitX + rabbit.getWidth()
-            && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth()>=rabbitY
-            && spikes.get(i).spikeY + spikes.get(i).getSpikeWidth()<=rabbitY + rabbit.getHeight()){
+        for (int i = 0; i< trashes.size(); i++){
+            if (trashes.get(i).spikeX + trashes.get(i).getTrashWidth()>=rabbitX
+            && trashes.get(i).spikeX <= rabbitX + rabbit.getWidth()
+            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()>=rabbitY
+            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()<=rabbitY + rabbit.getHeight()){
                 life--;
-                spikes.get(i).resetPosition();
+                trashes.get(i).resetPosition();
                 if(life ==0){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
