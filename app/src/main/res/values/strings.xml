@@ -1,3 +1,72 @@
 <resources>
-    <string name="app_name">SaveTheBunny</string>
+
+    <!--General-->
+    <string name="app_name">Save The Bunny Green Carson - GAME</string>
+
+    <!--Login screen-->
+    <string name="userEmail">E-mail</string>
+    <string name="userPassword">Password</string>
+    <string name="loginButton">Log in</string>
+    <string name="forgotPassword">Did you forgot your password?</string>
+    <string name="googleLogin">Log in with Google</string>
+    <string name="facebookLogin">Log in with Facebook</string>
+
+    <!--Global elements-->
+    <string name="logoDescription">GreenCarson Foundation Logotype</string>
+    <string name="start_game_button">Start Game</string>
+    <string name="go_back_button">Go Back</string>
+    <string name="help_button">Help</string>
+    <string name="background">Background picture</string>
+
+    <!--Level selection screen-->
+    <string name="basicLevel">Basic</string>
+    <string name="interLevel">Intermediate</string>
+    <string name="advancedLevel">Advanced</string>
+    <string name="nightmareLevel">Nightmare</string>
+
+    <string name="bas_levelSel">Basic Level Selection</string>
+    <string name="inter_levelSel">Intermediate Level Selection</string>
+    <string name="adv_levelSel">Advanced Level Selection</string>
+    <string name="nightmare_levelSel">Nightmare Level Selection</string>
+
+    <string name="dialog_selectLevel1">How to play?</string>
+    <string name="dialog_selectLevel2">Waste falls from the sky! You must drag them to the correct bin to avoid contamination.\n \n Depending on the level you chose, it will be more difficult to differentiate between the types of waste.</string>
+    <string name="dialog_selectLevel3">Learn, have fun and reecicla!</string>
+    <string name="dialog_selectLevel4">Learn, have fun and</string>
+
+    <string name="dialog_quit">Quit</string>
+    <string name="dialog_leave">Exit</string>
+    <string name="dialog_warningQuit">Do you want to\nexit the app?</string>
+    <string name="dialog_warningExit">Do you want to\nexit the game?</string>
+    <string name="dialog_warningAlert">You haven\'t chosen\na level yet!</string>
+    <string name="dialog_warningLeave">Do you want to\nleave the game?</string>
+
+    <!--Tutorial description-->
+    <string name="tutorial_buttonSel">Play</string>
+    <string name="tutorial_instruction">Touch the trash cans\nto learn more</string>
+    <string name="trashCan1">Green trash can</string>
+    <string name="trashCan2">Blue trash can</string>
+    <string name="trashCan3">Red trash can</string>
+    <string name="trashCan4">Gray trash can</string>
+
+    <string name="trashCan1_help">Learn more about the green trash can</string>
+    <string name="trashCan2_help">Learn more about the blue can</string>
+    <string name="trashCan3_help">Learn more about the gray trash can</string>
+    <string name="trashCan4_help">Learn more about the red trash can</string>
+
+    <string name="dialog_trashcan11">Recoverable waste</string>
+    <string name="dialog_trashcan12">All those waste materials that can be reused and do not decompose easily.\n\n<b>Like:</b>\n\nCardboard\nPaper\nPET\nHDPE\nGlass\nMetals\nAppliances</string>
+    <string name="dialog_trashcan21">Organic waste</string>
+    <string name="dialog_trashcan22">All those waste materials that are biodegradable remains of plants and animals.\n\n<b>Like:</b>\n\nPlants\nBones\nPeels\nExcrements\nBranches or leaves\nFood waste\nDirty paper or cardboard</string>
+    <string name="dialog_trashcan31">Usable inorganic waste</string>
+    <string name="dialog_trashcan32">All those waste materials that are not natural but can be recycled.\n\n<b>Like:</b>\n\nPaper\nCardboard\nGlass\nMetals\nClothes\nLeather\nCans</string>
+    <string name="dialog_trashcan41">Unusable inorganic waste</string>
+    <string name="dialog_trashcan42">All those waste materials that can no longer be reused and must be disposed of with caution.\n\n<b>Like:</b>\n\nToxic waste\nMedical waste\nIndustrial waste\nHazardous waste\nConstruction waste</string>
+
+    <!--Añadidos para SaveTheBunny-->
+
+    <string name="your_points">Tus puntos:</string>
+    <string name="highest_score">Puntaje más alto: </string>
+    <string name="dialog_restart">Reiniciar nivel</string>
+
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="buttonBack" type="id" />
+    <item name="buttonHelp" type="id" />
+    <item name="tutorialInstruction" type="id" />
+    <item name="trashCan1" type="id" />
+    <item name="trashCan2" type="id" />
+    <item name="trashCan3" type="id" />
+    <item name="trashCan2_help" type="id" />
+    <item name="trashCan1_help" type="id" />
+    <item name="trashCan3_help" type="id" />
+</resources>

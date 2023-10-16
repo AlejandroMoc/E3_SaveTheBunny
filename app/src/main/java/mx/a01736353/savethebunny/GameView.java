@@ -41,13 +41,12 @@ public class GameView extends View {
     float oldRabbitX;
     ArrayList<Spike> spikes;
     ArrayList<Explosion> explosions;
-
-
+    
     public GameView(
             Context context){
         super(context);
         this.context = context;
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
         rabbit = BitmapFactory.decodeResource(getResources(), R.drawable.rabbit);
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();

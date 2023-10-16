@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TutorialActivity">
+    <!--android:background="@drawable/background_tilesparent"-->
+
+    <!--Fondo de aplicación-->
+    <ImageView
+        android:id="@+id/backgroundImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_tiles"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/background" />
+
+    <!--Botón de Regresar-->
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/logo_back"
+        android:contentDescription="@string/go_back_button"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Botón de Ayuda-->
+    <Button
+        android:id="@+id/buttonHelp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/logo_help"
+        android:contentDescription="@string/help_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="dialogSelectLevel" />
+
+    <!--Logo Reecicla GAME-->
+    <!--984 × 559px-->
+    <ImageView
+        android:id="@+id/logoGame"
+        android:layout_width="246dp"
+        android:layout_height="139dp"
+        android:layout_marginTop="150dp"
+        android:contentDescription="@string/logoDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_game" />
+
+    <!--Botón de tutorial-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonBasic"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/gradient_button3"
+        android:contentDescription="@string/bas_levelSel"
+        android:onClick="playLevel_basic"
+        android:text="@string/tutorial_buttonSel"
+        android:textColor="@color/white"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoGame" />
+
+    <!--Texto de instrucción-->
+    <TextView
+        android:id="@+id/tutorialInstruction"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/tutorial_instruction"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:minHeight="22dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonBasic" />
+
+    <!--Botes de basura-->
+
+    <ImageView
+        android:id="@+id/trashCan1"
+        android:layout_width="140dp"
+        android:layout_height="220dp"
+        android:layout_marginBottom="-70dp"
+        android:contentDescription="@string/trashCan1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/trashcan_1"
+        tools:ignore="VisualLintBounds" />
+
+    <ImageView
+        android:id="@+id/trashCan2"
+        android:layout_width="140dp"
+        android:layout_height="220dp"
+        android:layout_marginBottom="-70dp"
+        android:contentDescription="@string/trashCan2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/trashcan_2"
+        tools:ignore="VisualLintBounds" />
+
+    <ImageView
+        android:id="@+id/trashCan3"
+        android:layout_width="140dp"
+        android:layout_height="220dp"
+        android:layout_marginBottom="-70dp"
+        android:contentDescription="@string/trashCan3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/trashcan_3"
+        tools:ignore="VisualLintBounds" />
+
+    <ImageView
+        android:id="@+id/trashCan1_help"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/trashCan1_help"
+        app:layout_constraintBottom_toTopOf="@+id/trashCan1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo_help"
+        android:onClick="dialog_trashcan1" />
+
+    <ImageView
+        android:id="@+id/trashCan2_help"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/trashCan2_help"
+        app:layout_constraintBottom_toTopOf="@id/trashCan2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo_help"
+        android:onClick="dialog_trashcan2" />
+
+    <ImageView
+        android:id="@+id/trashCan3_help"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/trashCan3_help"
+        app:layout_constraintBottom_toTopOf="@id/trashCan3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/logo_help"
+        android:onClick="dialog_trashcan3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
