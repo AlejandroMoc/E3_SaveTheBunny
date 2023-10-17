@@ -16,6 +16,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class GameView extends View {
     Paint pointsNumber = new Paint();
     Paint livesColor = new Paint();
     Paint lifeNumber = new Paint();
-    float TEXT_SIZE = 120;
+    float pointsTextSize = 120;
+    float lifeTextSize = 70;
     int points = 0;
     int life = 5;
     static int dWidth, dHeight;
@@ -72,15 +74,16 @@ public class GameView extends View {
                 }
             };
 
-            pointsNumber.setColor(Color.rgb(255,165,0));
-            pointsNumber.setTextSize(TEXT_SIZE);
+            pointsNumber.setColor(ContextCompat.getColor(context, R.color.black));
+            pointsNumber.setTextSize(pointsTextSize);
             pointsNumber.setTextAlign(Paint.Align.LEFT);
             pointsNumber.setTypeface(Typeface.DEFAULT_BOLD);
             //pointsNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
 
-            lifeNumber.setColor(Color.rgb(0,0,255));
-            lifeNumber.setTextSize(TEXT_SIZE);
+            lifeNumber.setColor(ContextCompat.getColor(context, R.color.black));
+            lifeNumber.setTextSize(pointsTextSize);
             lifeNumber.setTextAlign(Paint.Align.LEFT);
+            lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
             //lifeNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
 
 
@@ -159,8 +162,8 @@ public class GameView extends View {
 
         //Dibujar elementos en pantallas
         canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, livesColor);
-        canvas.drawText(""+points, 20,TEXT_SIZE,pointsNumber);
-        canvas.drawText(""+life, 20,TEXT_SIZE,lifeNumber);
+        canvas.drawText(""+points, dWidth/2+100, dHeight/7-pointsTextSize, pointsNumber);
+        canvas.drawText("x"+life, dWidth-200, dHeight/6-lifeTextSize, lifeNumber);
         handler.postDelayed(runnable, UPDATE_MILLIS);
 
     }
