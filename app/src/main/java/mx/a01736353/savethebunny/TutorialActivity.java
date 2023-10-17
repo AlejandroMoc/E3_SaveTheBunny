@@ -22,7 +22,10 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Variables pasadas
-        int levelNumber = 1;
+        int levelNumber = getIntent().getIntExtra("levelNumber", 0);
+
+        //BORRAR ESTO CUANDO SE PASE AL CODIGO FINAL
+        levelNumber = 1;
 
         //Ocultar barra de status
         requestWindowFeature(Window.FEATURE_NO_TITLE);

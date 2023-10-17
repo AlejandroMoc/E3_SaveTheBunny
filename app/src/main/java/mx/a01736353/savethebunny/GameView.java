@@ -22,10 +22,11 @@ import java.util.Random;
 
 public class GameView extends View {
 
-    Bitmap background, ground, rabbit;
+    Bitmap background, ground, dumpster;
     Rect rectBackground, rectGround;
     Context context;
     Handler handler;
+    //Milisegundos para actualizar
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint textPaint = new Paint();
@@ -35,9 +36,9 @@ public class GameView extends View {
     int life = 3;
     static int dWidth, dHeight;
     Random random;
-    float rabbitX, rabbitY;
+    float dumpsterX, dumpsterY;
     float oldX;
-    float oldRabbitX;
+    float oldDumpsterX;
     ArrayList<Trash> trashes;
     ArrayList<Explosion> explosions;
 
@@ -47,12 +48,14 @@ public class GameView extends View {
             this.context = context;
             background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
             ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
-            rabbit = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
+            dumpster = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
             Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
             dWidth = size.x;
             dHeight = size.y;
+
+            //Rectangulos para fondo y piso
             rectBackground = new Rect(0,0,dWidth,dHeight);
             rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
             handler = new Handler();
@@ -68,8 +71,8 @@ public class GameView extends View {
             textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
             healthPaint.setColor(Color.GREEN);
             random = new Random();
-            rabbitX = dWidth/2-rabbit.getWidth()/2;
-            rabbitY = dHeight - ground.getHeight() - rabbit.getHeight();
+            dumpsterX = dWidth/2-dumpster.getWidth()/2;
+            dumpsterY = dHeight - ground.getHeight() - dumpster.getHeight();
             trashes = new ArrayList<>();
             explosions = new ArrayList<>();
             for (int i=0; i<3; i++){
@@ -83,7 +86,7 @@ public class GameView extends View {
         super.onDraw(canvas);
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
-        canvas.drawBitmap(rabbit, rabbitX, rabbitY, null);
+        canvas.drawBitmap(dumpster, dumpsterX, dumpsterY, null);
         for (int i = 0; i< trashes.size(); i++){
             canvas.drawBitmap(trashes.get(i).getTrash(trashes.get(i).spikeFrame), trashes.get(i).spikeX, trashes.get(i).spikeY, null);
             trashes.get(i).spikeFrame++;
@@ -106,10 +109,10 @@ public class GameView extends View {
 
         //Check if collision occurres
         for (int i = 0; i< trashes.size(); i++){
-            if (trashes.get(i).spikeX + trashes.get(i).getTrashWidth()>=rabbitX
-            && trashes.get(i).spikeX <= rabbitX + rabbit.getWidth()
-            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()>=rabbitY
-            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()<=rabbitY + rabbit.getHeight()){
+            if (trashes.get(i).spikeX + trashes.get(i).getTrashWidth()>=dumpsterX
+            && trashes.get(i).spikeX <= dumpsterX + dumpster.getWidth()
+            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()>=dumpsterY
+            && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()<=dumpsterY + dumpster.getHeight()){
                 life--;
                 trashes.get(i).resetPosition();
                 if(life ==0){
@@ -130,35 +133,39 @@ public class GameView extends View {
             }
         }
 
+        //Actualizar color de pintura de acuerdo con las vidas
         if (life == 2){
             healthPaint.setColor(Color.YELLOW);
         } else if (life== 1){
             healthPaint.setColor(Color.RED);
         }
+
+        //Dibujar elementos en pantallas
         canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, healthPaint);
         canvas.drawText(""+points, 20,TEXT_SIZE,textPaint);
         handler.postDelayed(runnable, UPDATE_MILLIS);
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
-        if(touchY>=rabbitY){
+        if(touchY>=dumpsterY){
             int action = event.getAction();
             if(action == MotionEvent.ACTION_DOWN){
                 oldX = event.getX();
-                oldRabbitX = rabbitX;
+                oldDumpsterX = dumpsterX;
             }
             if (action == MotionEvent.ACTION_MOVE){
                 float shift = oldX - touchX;
-                float newRabbitX = oldRabbitX-shift;
-                if(newRabbitX<=0)
-                    rabbitX=0;
-                else if (newRabbitX >= dWidth - rabbit.getWidth())
-                    rabbitX = dWidth - rabbit.getWidth();
+                float newDumpsterX = oldDumpsterX-shift;
+                if(newDumpsterX<=0)
+                    dumpsterX=0;
+                else if (newDumpsterX >= dWidth - dumpster.getWidth())
+                    dumpsterX = dWidth - dumpster.getWidth();
                 else
-                    rabbitX=newRabbitX;
+                    dumpsterX=newDumpsterX;
             }
         }
         return true;

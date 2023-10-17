@@ -65,7 +65,7 @@
 
     <!--Añadidos para SaveTheBunny-->
 
-    <string name="your_points">Tus puntos:</string>
+    <string name="your_points">Tus puntos: </string>
     <string name="highest_score">Puntaje más alto: </string>
     <string name="dialog_restart">Reiniciar nivel</string>
 

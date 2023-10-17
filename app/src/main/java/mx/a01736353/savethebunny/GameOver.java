@@ -46,4 +46,11 @@ public class GameOver extends AppCompatActivity {
     public void exit(View view){
         finish();
     }
+
+    //Seguramente se tenga que pasar el caracter tambien aqui
+    public void goToTutorialBasic(View v){
+        Intent intent = new Intent(this, TutorialActivity.class);
+        startActivity(intent);
+    }
+
 }
