@@ -12,6 +12,7 @@ public class Trash {
     int spikeX,spikeY, spikeVelocity;
     Random random;
     public Trash(Context context){
+        //Falta cambiar esto por las basuras
         spike[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.spike0);
         spike[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.spike1);
         spike[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.spike2);

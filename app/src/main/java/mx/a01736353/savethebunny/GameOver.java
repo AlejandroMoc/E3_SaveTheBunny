@@ -21,13 +21,18 @@ public class GameOver extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_over);
+
+        //Recuperar datos
         tvPoints = findViewById(R.id.tvPoints);
         tvHighest = findViewById(R.id.tvHighest);
         ivNewHighest = findViewById(R.id.ivNewHighest);
+
         int points = getIntent().getExtras().getInt("points");
         tvPoints.setText(""+points);
         sharedPreferences=getSharedPreferences("my_pref",0);
         int highest = sharedPreferences.getInt("highest",0);
+
+        //Comparar con maayor puntuación
         if (points > highest){
             ivNewHighest.setVisibility(View.VISIBLE);
             highest=points;
@@ -35,7 +40,7 @@ public class GameOver extends AppCompatActivity {
             editor.putInt("highest",highest);
             editor.commit();
         }
-        tvHighest.setText(""+highest);
+        tvHighest.setText("  "+highest);
     }
 
     public void restart(View view){

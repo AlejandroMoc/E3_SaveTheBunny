@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -29,11 +30,12 @@ public class GameView extends View {
     //Milisegundos para actualizar
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
-    Paint textPaint = new Paint();
-    Paint healthPaint = new Paint();
+    Paint pointsNumber = new Paint();
+    Paint livesColor = new Paint();
+    Paint lifeNumber = new Paint();
     float TEXT_SIZE = 120;
     int points = 0;
-    int life = 3;
+    int life = 5;
     static int dWidth, dHeight;
     Random random;
     float dumpsterX, dumpsterY;
@@ -42,10 +44,14 @@ public class GameView extends View {
     ArrayList<Trash> trashes;
     ArrayList<Explosion> explosions;
 
+    //ArrayList<Dumpster> dumpsters;
+
     public GameView(
         Context context){
             super(context);
             this.context = context;
+
+            //Falta que
             background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
             ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
             dumpster = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
@@ -65,11 +71,21 @@ public class GameView extends View {
                     invalidate();
                 }
             };
-            textPaint.setColor(Color.rgb(255,165,0));
-            textPaint.setTextSize(TEXT_SIZE);
-            textPaint.setTextAlign(Paint.Align.LEFT);
-            textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
-            healthPaint.setColor(Color.GREEN);
+
+            pointsNumber.setColor(Color.rgb(255,165,0));
+            pointsNumber.setTextSize(TEXT_SIZE);
+            pointsNumber.setTextAlign(Paint.Align.LEFT);
+            pointsNumber.setTypeface(Typeface.DEFAULT_BOLD);
+            //pointsNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
+
+            lifeNumber.setColor(Color.rgb(0,0,255));
+            lifeNumber.setTextSize(TEXT_SIZE);
+            lifeNumber.setTextAlign(Paint.Align.LEFT);
+            //lifeNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
+
+
+            //Color inicial de barra de vida
+            livesColor.setColor(Color.GREEN);
             random = new Random();
             dumpsterX = dWidth/2-dumpster.getWidth()/2;
             dumpsterY = dHeight - ground.getHeight() - dumpster.getHeight();
@@ -107,7 +123,7 @@ public class GameView extends View {
 
         }
 
-        //Check if collision occurres
+        //Checar colisiones
         for (int i = 0; i< trashes.size(); i++){
             if (trashes.get(i).spikeX + trashes.get(i).getTrashWidth()>=dumpsterX
             && trashes.get(i).spikeX <= dumpsterX + dumpster.getWidth()
@@ -124,6 +140,7 @@ public class GameView extends View {
             }
         }
 
+        //Dibujar explosiones (cuando chocan con el piso)
         for(int i =0; i<explosions.size();i++){
             canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
                     explosions.get(i).explosionY, null);
@@ -134,23 +151,27 @@ public class GameView extends View {
         }
 
         //Actualizar color de pintura de acuerdo con las vidas
-        if (life == 2){
-            healthPaint.setColor(Color.YELLOW);
+        if (life == 3){
+            livesColor.setColor(Color.YELLOW);
         } else if (life== 1){
-            healthPaint.setColor(Color.RED);
+            livesColor.setColor(Color.RED);
         }
 
         //Dibujar elementos en pantallas
-        canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, healthPaint);
-        canvas.drawText(""+points, 20,TEXT_SIZE,textPaint);
+        canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, livesColor);
+        canvas.drawText(""+points, 20,TEXT_SIZE,pointsNumber);
+        canvas.drawText(""+life, 20,TEXT_SIZE,lifeNumber);
         handler.postDelayed(runnable, UPDATE_MILLIS);
 
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        //Obtener toque
         float touchX = event.getX();
         float touchY = event.getY();
+
         if(touchY>=dumpsterY){
             int action = event.getAction();
             if(action == MotionEvent.ACTION_DOWN){

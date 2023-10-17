@@ -64,7 +64,6 @@
     <string name="dialog_trashcan42">All those waste materials that can no longer be reused and must be disposed of with caution.\n\n<b>Like:</b>\n\nToxic waste\nMedical waste\nIndustrial waste\nHazardous waste\nConstruction waste</string>
 
     <!--Añadidos para SaveTheBunny-->
-
     <string name="your_points">Tus puntos: </string>
     <string name="highest_score">Puntaje más alto: </string>
     <string name="dialog_restart">Reiniciar nivel</string>
