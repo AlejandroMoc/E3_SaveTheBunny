@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class GameView extends View {
 
-    Bitmap background, ground, dumpster, heart;
+    Bitmap background, ground, dumpster, dumpster2, dumpster3, dumpster4, heart;
     Rect rectBackground, rectGround, rectHeart;
     Drawable heartDrawable = getResources().getDrawable(R.drawable.logo_heart);
     Context context;
@@ -44,8 +44,6 @@ public class GameView extends View {
     float oldDumpsterX;
     ArrayList<Trash> trashes;
     ArrayList<Explosion> explosions;
-    //ArrayList<Dumpster> dumpsters;
-
     public GameView(
         Context context){
             super(context);
@@ -54,6 +52,7 @@ public class GameView extends View {
             background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
             ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
             dumpster = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
+            dumpster = Bitmap.createScaledBitmap(dumpster, dumpster.getWidth()-dumpster.getWidth()/3, dumpster.getHeight()-dumpster.getHeight()/3, true);
             heart = BitmapFactory.decodeResource(getResources(), R.drawable.logo_heart);
 
             Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -114,10 +113,6 @@ public class GameView extends View {
         //Dibujar basuras
         for (int i = 0; i< trashes.size(); i++){
             canvas.drawBitmap(trashes.get(i).getTrash(trashes.get(i).spikeFrame), trashes.get(i).spikeX, trashes.get(i).spikeY, null);
-            trashes.get(i).spikeFrame++;
-            if (trashes.get(i).spikeFrame>2){
-                trashes.get(i).spikeFrame = 0;
-            }
             trashes.get(i).spikeY += trashes.get(i).spikeVelocity;
 
             //Check if bottom of spikes touch the bottom
@@ -176,7 +171,6 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         //Obtener toque
         float touchX = event.getX();
         float touchY = event.getY();
