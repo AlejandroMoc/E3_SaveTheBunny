@@ -7,37 +7,36 @@ import android.graphics.BitmapFactory;
 import java.util.Random;
 
 public class Trash {
-    Bitmap spike[]=new Bitmap[3];
+    Bitmap trashA[]=new Bitmap[3];
     Random random;
-    int spikeFrame = new Random().nextInt(3);
-    int spikeX,spikeY, spikeVelocity;
+    int trashAFrame = new Random().nextInt(3);
+    int trashAX,trashAY, trashAVelocity;
 
     public Trash(Context context){
         //Falta cambiar esto por las basuras
-        spike[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash1);
-        spike[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash2);
-        spike[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash3);
-
+        trashA[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b1);
+        trashA[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b2);
+        trashA[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b3);
         random = new Random();
         resetPosition();
     }
 
-    public Bitmap getTrash(int spikeFrame){
-        return spike[spikeFrame];
+    public Bitmap getTrash(int trashAFrame){
+        return trashA[trashAFrame];
     }
 
     public int getTrashWidth(){
-        return spike[0].getWidth();
+        return trashA[0].getWidth();
     }
 
-    public int getTrashHeigth(){
-        return spike[0].getHeight();
+    public int getTrashHeight(){
+        return trashA[0].getHeight();
     }
 
     public void resetPosition() {
-        spikeX = random.nextInt(GameView.dWidth - getTrashWidth());
-        spikeY = -200 + random.nextInt(600) * -1;
-        spikeVelocity = 35 + random.nextInt(16);
-
+        trashAX = random.nextInt(GameView.dWidth - getTrashWidth());
+        trashAY = -200 + random.nextInt(600) * -1;
+        trashAVelocity = 10 + random.nextInt(16);
+        trashAFrame = new Random().nextInt(3);
     }
 }
