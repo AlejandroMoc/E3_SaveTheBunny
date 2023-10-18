@@ -36,6 +36,7 @@ public class GameView extends View {
     float pointsTextSize = 120;
     float lifeTextSize = 70;
     int points = 0;
+    int minPoints = 500;
     int life = 5;
     static int dWidth, dHeight;
     Random random;
@@ -133,9 +134,9 @@ public class GameView extends View {
             && trashes.get(i).spikeX <= dumpsterX + dumpster.getWidth()
             && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()>=dumpsterY
             && trashes.get(i).spikeY + trashes.get(i).getTrashWidth()<=dumpsterY + dumpster.getHeight()){
-                life--;
+                //life--;
                 trashes.get(i).resetPosition();
-                if(life ==0){
+                if(life == 0 || points == minPoints){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     context.startActivity(intent);
@@ -175,6 +176,7 @@ public class GameView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
+        //Verificar toque
         if(touchY>=dumpsterY){
             int action = event.getAction();
             if(action == MotionEvent.ACTION_DOWN){
