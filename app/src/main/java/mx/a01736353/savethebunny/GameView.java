@@ -29,11 +29,11 @@ public class GameView extends View {
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
     float pointsTextSize = 120, lifeTextSize = 70;
-    int points = 0, winningState, minPoints = 500, life = 5,  trashASize=3;
+    int points = 0, winningState, minPoints = 500, life = 5,  trashBSize=3;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
+    boolean gameOver = false;
     Random random;
     float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, oldX, oldY;
-    float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY, oldTrashesBX, OldTrashesBY;
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
     public GameView(
@@ -97,7 +97,7 @@ public class GameView extends View {
             explosions = new ArrayList<>();
 
             //Generar basuras iniciales
-            for (int i=0; i<3; i++){
+            for (int i=0; i<trashBSize; i++){
                 Trash trash = new Trash(context);
                 trashesB.add(trash);
             }
@@ -105,47 +105,65 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+        //Checar si es gameOver
+        for (int i = 0; i< trashesB.size(); i++)
+            setGameOver();
+        if (gameOver == false){
+            super.onDraw(canvas);
+            //Dibujar fondo y piso
+            canvas.drawBitmap(background, null, rectBackground, null);
+            canvas.drawBitmap(ground, null, rectGround, null);
 
-        //Dibujar fondo y piso
-        canvas.drawBitmap(background, null, rectBackground, null);
-        canvas.drawBitmap(ground, null, rectGround, null);
+            //Dibujar basurasB
+            for (int i = 0; i< trashBSize; i++){
+                canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
+                trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
 
-        //Dibujar basurasB
-        for (int i = 0; i< trashASize; i++){
-            canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
-            trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
-
-            //Checar si las basuras no chocan con el bote (Falta cambiar)
-            if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
-                //En caso de caer al suelo, perder vida
-                life--;
-                Explosion explosion = new Explosion(context);
-                explosion.explosionX = trashesB.get(i).trashBX;
-                explosion.explosionY = trashesB.get(i).trashBY;
-                explosions.add(explosion);
-                trashesB.get(i).resetPosition();
+                //Checar si las basuras no chocan con el bote (Falta cambiar)
+                if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+                    //En caso de caer al suelo, perder vida
+                    life--;
+                    Explosion explosion = new Explosion(context);
+                    explosion.explosionX = trashesB.get(i).trashBX;
+                    explosion.explosionY = trashesB.get(i).trashBY;
+                    explosions.add(explosion);
+                    trashesB.get(i).resetPosition();
+                }
             }
-        }
 
-        //Dibujar explosiones (cuando chocan con el piso)
-        for(int i =0; i<explosions.size();i++){
-            canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
-                    explosions.get(i).explosionY, null);
-            explosions.get(i).explosionFrame++;
-            if (explosions.get(i).explosionFrame>3){
-                explosions.remove(i);
+            //Dibujar explosiones (cuando chocan con el piso)
+            for(int i =0; i<explosions.size();i++){
+                canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
+                        explosions.get(i).explosionY, null);
+                explosions.get(i).explosionFrame++;
+                if (explosions.get(i).explosionFrame>3){
+                    explosions.remove(i);
+                }
             }
-        }
 
-        //Dibujar interfaz
-        canvas.drawBitmap(dumpsterA, dumpsterAX, dumpstersY, null);
-        canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
-        canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
-        heartDrawable.draw(canvas);
-        canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
-        canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
-        handler.postDelayed(runnable, UPDATE_MILLIS);
+            //Dibujar interfaz
+            canvas.drawBitmap(dumpsterA, dumpsterAX, dumpstersY, null);
+            canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
+            canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
+            heartDrawable.draw(canvas);
+            canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
+            canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
+            handler.postDelayed(runnable, UPDATE_MILLIS);
+        }
+    }
+
+    private void setGameOver() {
+        //Mandar a pantalla de reinicio o de aceptación
+        if(life==0){
+            if(points >= minPoints){winningState=1;}
+            else{winningState=0;}
+            Intent intent = new Intent(context, GameOver.class);
+            intent.putExtra("points", points);
+            intent.putExtra("winningState", winningState);
+            ((Activity)context).finish();
+            context.startActivity(intent);
+            gameOver=true;
+        }
     }
 
     @Override
@@ -156,7 +174,6 @@ public class GameView extends View {
 
         for (int i = 0; i < trashesB.size(); i++) {
             Trash trashNow = trashesB.get(i);
-            // Si el toque es en la basura
             if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())) {
                 action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
@@ -196,12 +213,11 @@ public class GameView extends View {
         //Colisión con boteB y mandar a pantalla de reinicio
         for (int i = 0; i< trashesB.size(); i++){
             Trash trashNow = trashesB.get(i);
-            //Si la
+            //Si choca con bote B es points++
             if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
                     && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
                     && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
                     && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
-                //life--;
                 points +=10;
                 trashNow.resetPosition();
 
@@ -210,44 +226,6 @@ public class GameView extends View {
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
                     //winningState=0;
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }*/
-
-                //Si la vida llega a 0 y los puntos son más que los mínimos, ¡ganaste!
-                //AQUI codigo por el que se quiere reemplazar y no funciona
-                if(life==0){
-                    if(points >= minPoints){
-                        Intent intent = new Intent(context, GameOver.class);
-                        intent.putExtra("points", points);
-                        winningState=1;
-                        intent.putExtra("winningState", winningState);
-                        context.startActivity(intent);
-                        ((Activity)context).finish();
-                    } else {
-                        Intent intent = new Intent(context, GameOver.class);
-                        intent.putExtra("points", points);
-                        winningState=0;
-                        intent.putExtra("winningState", winningState);
-                        context.startActivity(intent);
-                        ((Activity)context).finish();
-                    }
-                }
-
-/*                if(life == 0 && points >= minPoints){
-                    Intent intent = new Intent(context, GameOver.class);
-                    intent.putExtra("points", points);
-                    winningState=1;
-                    intent.putExtra("winningState", winningState);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }
-                //Si la vida llega a 0 y los puntos no son los mínimos, ¡perdiste!
-                if(life == 0 && points < minPoints){
-                    Intent intent = new Intent(context, GameOver.class);
-                    intent.putExtra("points", points);
-                    winningState=0;
-                    intent.putExtra("winningState", winningState);
                     context.startActivity(intent);
                     ((Activity)context).finish();
                 }*/
