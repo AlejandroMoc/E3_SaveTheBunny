@@ -31,7 +31,6 @@ public class GameView extends View {
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint();
-    Paint livesColor = new Paint();
     Paint lifeNumber = new Paint();
     float pointsTextSize = 120;
     float lifeTextSize = 70;
@@ -53,7 +52,7 @@ public class GameView extends View {
             background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
             ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
             dumpster = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
-            dumpster = Bitmap.createScaledBitmap(dumpster, dumpster.getWidth()-dumpster.getWidth()/3, dumpster.getHeight()-dumpster.getHeight()/3, true);
+            //dumpster = Bitmap.createScaledBitmap(dumpster, dumpster.getWidth()-dumpster.getWidth()/3, dumpster.getHeight()-dumpster.getHeight()/3, true);
             heart = BitmapFactory.decodeResource(getResources(), R.drawable.logo_heart);
 
             Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -89,8 +88,6 @@ public class GameView extends View {
             //100 es el margen, 120 es el tamaño del corazón
             heartDrawable.setBounds(dWidth - 120 - 100, 100, dWidth - 100, 100 + 120);
 
-            //Color inicial de barra de vida
-            livesColor.setColor(Color.GREEN);
             random = new Random();
             dumpsterX = dWidth/2-dumpster.getWidth()/2;
             dumpsterY = dHeight - ground.getHeight() - dumpster.getHeight();
@@ -155,16 +152,8 @@ public class GameView extends View {
             }
         }
 
-        //Actualizar color de pintura de acuerdo con las vidas
-        if (life == 3){
-            livesColor.setColor(Color.YELLOW);
-        } else if (life== 1){
-            livesColor.setColor(Color.RED);
-        }
-
         //Dibujar elementos en pantallas
         heartDrawable.draw(canvas);
-        canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, livesColor);
         canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
         canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
         handler.postDelayed(runnable, UPDATE_MILLIS);
@@ -176,16 +165,22 @@ public class GameView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
-        //Verificar toque
-        if(touchY>=dumpsterY){
+/*        if(touchY>=dumpsterY){
+            //Verificar toque
             int action = event.getAction();
+            //Si la acción es estar presionando la pantalla
             if(action == MotionEvent.ACTION_DOWN){
+                //Obtener el toque del dedo en X
                 oldX = event.getX();
+                //Obtener posición del cubo de basura
                 oldDumpsterX = dumpsterX;
             }
+            //Si la acción es mover la pantalla
             if (action == MotionEvent.ACTION_MOVE){
+                //Calcular shift en base al toque
                 float shift = oldX - touchX;
                 float newDumpsterX = oldDumpsterX-shift;
+                //Mover bote
                 if(newDumpsterX<=0)
                     dumpsterX=0;
                 else if (newDumpsterX >= dWidth - dumpster.getWidth())
@@ -193,7 +188,7 @@ public class GameView extends View {
                 else
                     dumpsterX=newDumpsterX;
             }
-        }
+        }*/
         return true;
     }
 }
