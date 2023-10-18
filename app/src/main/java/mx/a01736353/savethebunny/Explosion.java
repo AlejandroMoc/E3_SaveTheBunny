@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory;
 public class Explosion {
     Bitmap explosion[] = new Bitmap[4];
     int explosionFrame = 0;
-    int explosionX, explosionY;
+    float explosionX, explosionY;
 
     //Constructor
     public Explosion(Context context){

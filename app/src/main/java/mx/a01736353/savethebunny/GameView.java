@@ -23,10 +23,9 @@ public class GameView extends View {
 
     Bitmap background, ground, dumpsterA, dumpsterB, dumpsterC, dumpsterD, heart;
     Rect rectBackground, rectGround, rectHeart;
-    Drawable heartDrawable = getResources().getDrawable(R.drawable.logo_heart);
+    Drawable heartDrawable = ContextCompat.getDrawable(getContext(), R.drawable.logo_heart);
     Context context;
     Handler handler;
-    //Milisegundos para actualizar
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint();
@@ -36,12 +35,16 @@ public class GameView extends View {
     int points = 0;
     int minPoints = 500;
     int life = 5;
+    int heartSize=120;
+    int heartMargin=100;
+
     static int dWidth, dHeight;
     Random random;
     float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY;
     float oldX;
     float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY;
-    ArrayList<Trash> trashes;
+    float oldTrashesAX, OldTrashesAY;
+    ArrayList<Trash> trashesA;
     ArrayList<Explosion> explosions;
     public GameView(
         Context context){
@@ -88,8 +91,7 @@ public class GameView extends View {
             lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
 
             heartDrawable.setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
-            //100 es el margen, 120 es el tamaño del corazón
-            heartDrawable.setBounds(dWidth - 120 - 100, 100, dWidth - 100, 100 + 120);
+            heartDrawable.setBounds(dWidth - heartSize - heartMargin, heartMargin, dWidth - heartMargin, heartMargin + heartSize);
 
             random = new Random();
 
@@ -98,16 +100,16 @@ public class GameView extends View {
             dumpsterBX = dWidth/2-dumpsterB.getWidth()/2;
             dumpsterCX = dWidth-dumpsterB.getWidth()-dWidth/20;
             //AQUI FALTA LO DE D
-            dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight();
+            dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
 
             //Arrays para elementos
-            trashes = new ArrayList<>();
+            trashesA = new ArrayList<>();
             explosions = new ArrayList<>();
 
             //Generar basuras iniciales
             for (int i=0; i<3; i++){
                 Trash trash = new Trash(context);
-                trashes.add(trash);
+                trashesA.add(trash);
             }
         }
 
@@ -118,34 +120,32 @@ public class GameView extends View {
         //Dibujar elementos fijos
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
-        canvas.drawBitmap(dumpsterA, dumpsterAX, dumpstersY, null);
-        canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
-        canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
 
         //Dibujar basura A
         for (int i = 0; i< 1; i++){
-            canvas.drawBitmap(trashes.get(i).getTrash(trashes.get(i).trashAFrame), trashes.get(i).trashAX, trashes.get(i).trashAY, null);
-            trashes.get(i).trashAY += trashes.get(i).trashAVelocity;
+            canvas.drawBitmap(trashesA.get(i).getTrash(trashesA.get(i).trashAFrame), trashesA.get(i).trashAX, trashesA.get(i).trashAY, null);
+            trashesA.get(i).trashAY += trashesA.get(i).trashAVelocity;
 
             //Checar si las basuras no chocan con el bote (Falta cambiar)
-            if (trashes.get(i).trashAY + trashes.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
-                points +=10;
+            if (trashesA.get(i).trashAY + trashesA.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+                //points +=10;
+                life--;
                 Explosion explosion = new Explosion(context);
-                explosion.explosionX = trashes.get(i).trashAX;
-                explosion.explosionY = trashes.get(i).trashAY;
+                explosion.explosionX = trashesA.get(i).trashAX;
+                explosion.explosionY = trashesA.get(i).trashAY;
                 explosions.add(explosion);
-                trashes.get(i).resetPosition();
+                trashesA.get(i).resetPosition();
             }
         }
 
-        //Checar colisiones
-        for (int i = 0; i< trashes.size(); i++){
-            if (trashes.get(i).trashAX + trashes.get(i).getTrashWidth()>=dumpsterBX
-            && trashes.get(i).trashAX <= dumpsterBX + dumpsterB.getWidth()
-            && trashes.get(i).trashAY + trashes.get(i).getTrashWidth()>=dumpstersY
-            && trashes.get(i).trashAY + trashes.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+        //Checar colisión con los botes
+/*        for (int i = 0; i< trashesA.size(); i++){
+            if (trashesA.get(i).trashAX + trashesA.get(i).getTrashWidth()>=dumpsterBX
+            && trashesA.get(i).trashAX <= dumpsterBX + dumpsterB.getWidth()
+            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()>=dumpstersY
+            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                 //life--;
-                trashes.get(i).resetPosition();
+                trashesA.get(i).resetPosition();
                 if(life == 0 || points == minPoints){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
@@ -153,7 +153,7 @@ public class GameView extends View {
                     ((Activity)context).finish();
                 }
             }
-        }
+        }*/
 
         //Dibujar explosiones (cuando chocan con el piso)
         for(int i =0; i<explosions.size();i++){
@@ -166,6 +166,9 @@ public class GameView extends View {
         }
 
         //Dibujar interfaz
+        canvas.drawBitmap(dumpsterA, dumpsterAX, dumpstersY, null);
+        canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
+        canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
         heartDrawable.draw(canvas);
         canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
         canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
@@ -178,8 +181,57 @@ public class GameView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
+        float shift, oldTrashesAX, newTrashesAX;
+        
+        //Colisión con las basuras
+        /*        for (int i = 0; i< trashesA.size(); i++){
+            if (trashesA.get(i).trashAX + trashesA.get(i).getTrashWidth()>=dumpsterBX
+            && trashesA.get(i).trashAX <= dumpsterBX + dumpsterB.getWidth()
+            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()>=dumpstersY
+            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+                //life--;
+                trashesA.get(i).resetPosition();
+                if(life == 0 || points == minPoints){
+                    Intent intent = new Intent(context, GameOver.class);
+                    intent.putExtra("points", points);
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
+                }
+            }
+        }*/
+
+        for (int i = 0; i< trashesA.size(); i++){
+            //Si el toque es en la basura
+            if (touchY>=trashesA.get(i).trashAY){
+                //Verificar accion
+                int action = event.getAction();
+                if(action == MotionEvent.ACTION_DOWN){
+                    //Obtener el toque del dedo en X
+                    oldX = event.getX();
+                    //Obtener posición de basura
+                    oldTrashesAX = trashesA.get(i).trashAX;
+                }
+                if (action == MotionEvent.ACTION_MOVE){
+                    //Calcular shift en base al toque
+                    shift = oldX - touchX;
+                    oldTrashesAX = 0;
+                    newTrashesAX = oldTrashesAX-shift;
+
+                    //Mover elemento
+                    if(newTrashesAX<=0)
+                        trashesA.get(i).trashAX=0;
+                    else if (newTrashesAX >= dWidth - trashesA.get(i).getTrashWidth())
+                        trashesA.get(i).trashAX = dWidth - trashesA.get(i).getTrashWidth();
+                    else
+                        trashesA.get(i).trashAX=newTrashesAX;
+
+                }
+            }
+        }
+        
+        
 /*        if(touchY>=dumpstersY){
-            //Verificar toque
+            //Verificar accion
             int action = event.getAction();
             //Si la acción es estar presionando la pantalla
             if(action == MotionEvent.ACTION_DOWN){
