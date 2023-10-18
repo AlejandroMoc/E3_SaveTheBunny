@@ -43,8 +43,8 @@ public class GameView extends View {
     float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY;
     float oldX;
     float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY;
-    float oldTrashesAX, OldTrashesAY;
-    ArrayList<Trash> trashesA;
+    float oldTrashesBX, OldTrashesBY;
+    ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
     public GameView(
         Context context){
@@ -103,13 +103,13 @@ public class GameView extends View {
             dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
 
             //Arrays para elementos
-            trashesA = new ArrayList<>();
+            trashesB = new ArrayList<>();
             explosions = new ArrayList<>();
 
             //Generar basuras iniciales
             for (int i=0; i<3; i++){
                 Trash trash = new Trash(context);
-                trashesA.add(trash);
+                trashesB.add(trash);
             }
         }
 
@@ -123,29 +123,29 @@ public class GameView extends View {
 
         //Dibujar basura A
         for (int i = 0; i< 1; i++){
-            canvas.drawBitmap(trashesA.get(i).getTrash(trashesA.get(i).trashAFrame), trashesA.get(i).trashAX, trashesA.get(i).trashAY, null);
-            trashesA.get(i).trashAY += trashesA.get(i).trashAVelocity;
+            canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
+            trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
 
             //Checar si las basuras no chocan con el bote (Falta cambiar)
-            if (trashesA.get(i).trashAY + trashesA.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+            if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
                 //points +=10;
                 life--;
                 Explosion explosion = new Explosion(context);
-                explosion.explosionX = trashesA.get(i).trashAX;
-                explosion.explosionY = trashesA.get(i).trashAY;
+                explosion.explosionX = trashesB.get(i).trashBX;
+                explosion.explosionY = trashesB.get(i).trashBY;
                 explosions.add(explosion);
-                trashesA.get(i).resetPosition();
+                trashesB.get(i).resetPosition();
             }
         }
 
         //Checar colisión con los botes
-/*        for (int i = 0; i< trashesA.size(); i++){
-            if (trashesA.get(i).trashAX + trashesA.get(i).getTrashWidth()>=dumpsterBX
-            && trashesA.get(i).trashAX <= dumpsterBX + dumpsterB.getWidth()
-            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()>=dumpstersY
-            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+/*        for (int i = 0; i< trashesB.size(); i++){
+            if (trashesB.get(i).trashBX + trashesB.get(i).getTrashWidth()>=dumpsterBX
+            && trashesB.get(i).trashBX <= dumpsterBX + dumpsterB.getWidth()
+            && trashesB.get(i).trashBY + trashesB.get(i).getTrashWidth()>=dumpstersY
+            && trashesB.get(i).trashBY + trashesB.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                 //life--;
-                trashesA.get(i).resetPosition();
+                trashesB.get(i).resetPosition();
                 if(life == 0 || points == minPoints){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
@@ -177,12 +177,12 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //Obtener toque
+        // Obtener toque
         float touchX = event.getX();
         float touchY = event.getY();
+        float shift;
+        int action;
 
-        float shift, oldTrashesAX, newTrashesAX;
-        
         //Colisión con las basuras
         /*        for (int i = 0; i< trashesA.size(); i++){
             if (trashesA.get(i).trashAX + trashesA.get(i).getTrashWidth()>=dumpsterBX
@@ -200,58 +200,55 @@ public class GameView extends View {
             }
         }*/
 
-        for (int i = 0; i< trashesA.size(); i++){
-            //Si el toque es en la basura
-            if (touchY>=trashesA.get(i).trashAY){
-                //Verificar accion
-                int action = event.getAction();
-                if(action == MotionEvent.ACTION_DOWN){
-                    //Obtener el toque del dedo en X
+        for (int i = 0; i < trashesB.size(); i++) {
+            Trash trashNow = trashesB.get(i);
+            // Si el toque es en la basura
+            if (touchY >= trashNow.trashBY) {
+                action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    // Obtener toque en X
                     oldX = event.getX();
-                    //Obtener posición de basura
-                    oldTrashesAX = trashesA.get(i).trashAX;
+                    // Obtener posición de basura
+                    trashNow.oldTrashesBX = trashNow.trashBX;
                 }
-                if (action == MotionEvent.ACTION_MOVE){
-                    //Calcular shift en base al toque
+                if (action == MotionEvent.ACTION_MOVE) {
                     shift = oldX - touchX;
-                    oldTrashesAX = 0;
-                    newTrashesAX = oldTrashesAX-shift;
+                    float newTrashesBX = trashNow.oldTrashesBX - shift;
 
-                    //Mover elemento
-                    if(newTrashesAX<=0)
-                        trashesA.get(i).trashAX=0;
-                    else if (newTrashesAX >= dWidth - trashesA.get(i).getTrashWidth())
-                        trashesA.get(i).trashAX = dWidth - trashesA.get(i).getTrashWidth();
+                    // Mover elemento
+                    if (newTrashesBX <= 0)
+                        trashNow.trashBX = 0;
+                    else if (newTrashesBX >= dWidth - trashNow.getTrashWidth())
+                        trashNow.trashBX = dWidth - trashNow.getTrashWidth();
                     else
-                        trashesA.get(i).trashAX=newTrashesAX;
-
+                        trashNow.trashBX = newTrashesBX;
                 }
             }
         }
-        
-        
-/*        if(touchY>=dumpstersY){
-            //Verificar accion
-            int action = event.getAction();
-            //Si la acción es estar presionando la pantalla
-            if(action == MotionEvent.ACTION_DOWN){
-                //Obtener el toque del dedo en X
+
+        // Mover botes (ya no es necesario)
+/*        if (touchY >= dumpstersY) {
+            // Verificar accion
+            action = event.getAction();
+            // Si la acción es estar presionando la pantalla
+            if (action == MotionEvent.ACTION_DOWN) {
+                // Obtener el toque del dedo en X
                 oldX = event.getX();
-                //Obtener posición del cubo de basura
+                // Obtener posición del cubo de basura
                 olddumpsterBX = dumpsterBX;
             }
-            //Si la acción es mover la pantalla
-            if (action == MotionEvent.ACTION_MOVE){
-                //Calcular shift en base al toque
-                float shift = oldX - touchX;
-                float newdumpsterBX = olddumpsterBX-shift;
-                //Mover bote
-                if(newdumpsterBX<=0)
-                    dumpsterBX=0;
+            // Si la acción es mover la pantalla
+            if (action == MotionEvent.ACTION_MOVE) {
+                // Calcular shift en base al toque
+                shift = oldX - touchX;
+                float newdumpsterBX = olddumpsterBX - shift;
+                // Mover bote
+                if (newdumpsterBX <= 0)
+                    dumpsterBX = 0;
                 else if (newdumpsterBX >= dWidth - dumpsterB.getWidth())
                     dumpsterBX = dWidth - dumpsterB.getWidth();
                 else
-                    dumpsterBX=newdumpsterBX;
+                    dumpsterBX = newdumpsterBX;
             }
         }*/
         return true;
