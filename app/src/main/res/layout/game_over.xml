@@ -95,6 +95,10 @@
         </TableRow>
     </TableLayout>
 
+    <!--Falta poner aquí tabla de scores-->
+
+
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"

@@ -11,21 +11,20 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 public class GameView extends View {
 
-    Bitmap background, ground, dumpster;
-    Rect rectBackground, rectGround;
+    Bitmap background, ground, dumpster, heart;
+    Rect rectBackground, rectGround, rectHeart;
+    Drawable heartDrawable = getResources().getDrawable(R.drawable.logo_heart);
     Context context;
     Handler handler;
     //Milisegundos para actualizar
@@ -45,7 +44,6 @@ public class GameView extends View {
     float oldDumpsterX;
     ArrayList<Trash> trashes;
     ArrayList<Explosion> explosions;
-
     //ArrayList<Dumpster> dumpsters;
 
     public GameView(
@@ -53,10 +51,11 @@ public class GameView extends View {
             super(context);
             this.context = context;
 
-            //Falta que
             background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
             ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground);
             dumpster = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
+            heart = BitmapFactory.decodeResource(getResources(), R.drawable.logo_heart);
+
             Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -66,6 +65,7 @@ public class GameView extends View {
             //Rectangulos para fondo y piso
             rectBackground = new Rect(0,0,dWidth,dHeight);
             rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
+            rectHeart = new Rect(0,0,dWidth,dHeight);
             handler = new Handler();
             runnable = new Runnable() {
                 @Override
@@ -81,11 +81,13 @@ public class GameView extends View {
             //pointsNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
 
             lifeNumber.setColor(ContextCompat.getColor(context, R.color.black));
-            lifeNumber.setTextSize(pointsTextSize);
+            lifeNumber.setTextSize(lifeTextSize);
             lifeNumber.setTextAlign(Paint.Align.LEFT);
             lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
-            //lifeNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
 
+            heartDrawable.setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
+            //100 es el margen, 120 es el tamaño del corazón
+            heartDrawable.setBounds(dWidth - 120 - 100, 100, dWidth - 100, 100 + 120);
 
             //Color inicial de barra de vida
             livesColor.setColor(Color.GREEN);
@@ -94,6 +96,8 @@ public class GameView extends View {
             dumpsterY = dHeight - ground.getHeight() - dumpster.getHeight();
             trashes = new ArrayList<>();
             explosions = new ArrayList<>();
+
+            //Generar basuras iniciales
             for (int i=0; i<3; i++){
                 Trash trash = new Trash(context);
                 trashes.add(trash);
@@ -104,8 +108,10 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawBitmap(background, null, rectBackground, null);
-        canvas.drawBitmap(ground, null, rectGround, null);
         canvas.drawBitmap(dumpster, dumpsterX, dumpsterY, null);
+        canvas.drawBitmap(ground, null, rectGround, null);
+
+        //Dibujar basuras
         for (int i = 0; i< trashes.size(); i++){
             canvas.drawBitmap(trashes.get(i).getTrash(trashes.get(i).spikeFrame), trashes.get(i).spikeX, trashes.get(i).spikeY, null);
             trashes.get(i).spikeFrame++;
@@ -161,11 +167,11 @@ public class GameView extends View {
         }
 
         //Dibujar elementos en pantallas
+        heartDrawable.draw(canvas);
         canvas.drawRect(dWidth-200,30,dWidth-200+60*life,80, livesColor);
-        canvas.drawText(""+points, dWidth/2+100, dHeight/7-pointsTextSize, pointsNumber);
-        canvas.drawText("x"+life, dWidth-200, dHeight/6-lifeTextSize, lifeNumber);
+        canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
+        canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
         handler.postDelayed(runnable, UPDATE_MILLIS);
-
     }
 
     @Override
