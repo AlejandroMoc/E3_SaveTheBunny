@@ -26,8 +26,9 @@ public class GameOver extends AppCompatActivity {
         tvPoints = findViewById(R.id.tvPoints);
         tvHighest = findViewById(R.id.tvHighest);
         ivNewHighest = findViewById(R.id.ivNewHighest);
-
         int points = getIntent().getExtras().getInt("points");
+        int winningState = getIntent().getExtras().getInt("winningState");
+
         tvPoints.setText(""+points);
         sharedPreferences=getSharedPreferences("my_pref",0);
         int highest = sharedPreferences.getInt("highest",0);
@@ -48,12 +49,9 @@ public class GameOver extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    public void exit(View view){
-        finish();
-    }
 
     //Seguramente se tenga que pasar el caracter tambien aqui
-    public void goToTutorialBasic(View v){
+    public void goToWinningState(View v){
         Intent intent = new Intent(this, TutorialActivity.class);
         startActivity(intent);
     }

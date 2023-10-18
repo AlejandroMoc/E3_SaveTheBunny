@@ -29,11 +29,10 @@ public class GameView extends View {
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
     float pointsTextSize = 120, lifeTextSize = 70;
-    int points = 0, minPoints = 500, life = 5, heartSize=120, heartMargin=100, trashASize=3;
-
-    static int dWidth, dHeight;
+    int points = 0, winningState, minPoints = 500, life = 5,  trashASize=3;
+    static int dWidth, dHeight, heartSize=120, heartMargin=100;
     Random random;
-    float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, oldX;
+    float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, oldX, oldY;
     float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY, oldTrashesBX, OldTrashesBY;
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
@@ -129,8 +128,6 @@ public class GameView extends View {
             }
         }
 
-
-
         //Dibujar explosiones (cuando chocan con el piso)
         for(int i =0; i<explosions.size();i++){
             canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
@@ -154,31 +151,44 @@ public class GameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Obtener toque
-        float touchX = event.getX(), touchY = event.getY(), shift;
+        float touchX = event.getX(), touchY = event.getY(), shiftX, shiftY;
         int action;
 
         for (int i = 0; i < trashesB.size(); i++) {
             Trash trashNow = trashesB.get(i);
             // Si el toque es en la basura
-            if (touchY >= trashNow.trashBY) {
+            if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())) {
                 action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
                     // Obtener toque en X
                     oldX = event.getX();
+                    // Obtener toque en Y
+                    oldY = event.getY();
                     // Obtener posición de basura
                     trashNow.oldTrashesBX = trashNow.trashBX;
+                    trashNow.oldTrashesBY = trashNow.trashBY;
                 }
                 if (action == MotionEvent.ACTION_MOVE) {
-                    shift = oldX - touchX;
-                    float newTrashesBX = trashNow.oldTrashesBX - shift;
+                    shiftX = oldX - touchX;
+                    shiftY = oldY - touchY;
+                    float newTrashesBX = trashNow.oldTrashesBX - shiftX;
+                    float newTrashesBY = trashNow.oldTrashesBY - shiftY;
 
-                    // Mover elemento
+                    // Mover elemento en el eje X
                     if (newTrashesBX <= 0)
                         trashNow.trashBX = 0;
                     else if (newTrashesBX >= dWidth - trashNow.getTrashWidth())
                         trashNow.trashBX = dWidth - trashNow.getTrashWidth();
                     else
                         trashNow.trashBX = newTrashesBX;
+
+                    // Mover elemento en el eje Y
+                    if (newTrashesBY <= 0)
+                        trashNow.trashBY = 0;
+                    else if (newTrashesBY >= dHeight - trashNow.getTrashHeight())
+                        trashNow.trashBY = dHeight - trashNow.getTrashHeight();
+                    else
+                        trashNow.trashBY = newTrashesBY;
                 }
             }
         }
@@ -186,7 +196,7 @@ public class GameView extends View {
         //Colisión con boteB y mandar a pantalla de reinicio
         for (int i = 0; i< trashesB.size(); i++){
             Trash trashNow = trashesB.get(i);
-            //Si la longitud de la basura es mauor a
+            //Si la
             if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
                     && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
                     && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
@@ -194,12 +204,54 @@ public class GameView extends View {
                 //life--;
                 points +=10;
                 trashNow.resetPosition();
-                if(life == 0 || points == minPoints){
+
+                //Codigo antiguamente utilizado (parece que tampoco funciona)
+/*                if(life == 0 || points == minPoints){
                     Intent intent = new Intent(context, GameOver.class);
                     intent.putExtra("points", points);
+                    //winningState=0;
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
+                }*/
+
+                //Si la vida llega a 0 y los puntos son más que los mínimos, ¡ganaste!
+                //AQUI codigo por el que se quiere reemplazar y no funciona
+                if(life==0){
+                    if(points >= minPoints){
+                        Intent intent = new Intent(context, GameOver.class);
+                        intent.putExtra("points", points);
+                        winningState=1;
+                        intent.putExtra("winningState", winningState);
+                        context.startActivity(intent);
+                        ((Activity)context).finish();
+                    } else {
+                        Intent intent = new Intent(context, GameOver.class);
+                        intent.putExtra("points", points);
+                        winningState=0;
+                        intent.putExtra("winningState", winningState);
+                        context.startActivity(intent);
+                        ((Activity)context).finish();
+                    }
+                }
+
+/*                if(life == 0 && points >= minPoints){
+                    Intent intent = new Intent(context, GameOver.class);
+                    intent.putExtra("points", points);
+                    winningState=1;
+                    intent.putExtra("winningState", winningState);
                     context.startActivity(intent);
                     ((Activity)context).finish();
                 }
+                //Si la vida llega a 0 y los puntos no son los mínimos, ¡perdiste!
+                if(life == 0 && points < minPoints){
+                    Intent intent = new Intent(context, GameOver.class);
+                    intent.putExtra("points", points);
+                    winningState=0;
+                    intent.putExtra("winningState", winningState);
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
+                }*/
+
             }
         }
 
