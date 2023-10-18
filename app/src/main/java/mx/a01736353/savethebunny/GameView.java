@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameView extends View {
-
     Bitmap background, ground, dumpsterA, dumpsterB, dumpsterC, dumpsterD, heart;
     Rect rectBackground, rectGround, rectHeart;
     Drawable heartDrawable = ContextCompat.getDrawable(getContext(), R.drawable.logo_heart);
@@ -28,22 +27,14 @@ public class GameView extends View {
     Handler handler;
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
-    Paint pointsNumber = new Paint();
-    Paint lifeNumber = new Paint();
-    float pointsTextSize = 120;
-    float lifeTextSize = 70;
-    int points = 0;
-    int minPoints = 500;
-    int life = 5;
-    int heartSize=120;
-    int heartMargin=100;
+    Paint pointsNumber = new Paint(), lifeNumber = new Paint();
+    float pointsTextSize = 120, lifeTextSize = 70;
+    int points = 0, minPoints = 500, life = 5, heartSize=120, heartMargin=100, trashASize=3;
 
     static int dWidth, dHeight;
     Random random;
-    float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY;
-    float oldX;
-    float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY;
-    float oldTrashesBX, OldTrashesBY;
+    float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, oldX;
+    float olddumpsterAX, olddumpsterAY, olddumpsterBX, olddumpstersY, olddumpsterCX, olddumpsterCY, olddumpsterDX, olddumpsterDY, oldTrashesBX, OldTrashesBY;
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
     public GameView(
@@ -117,18 +108,18 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        //Dibujar elementos fijos
+        //Dibujar fondo y piso
         canvas.drawBitmap(background, null, rectBackground, null);
         canvas.drawBitmap(ground, null, rectGround, null);
 
-        //Dibujar basura A
-        for (int i = 0; i< 1; i++){
+        //Dibujar basurasB
+        for (int i = 0; i< trashASize; i++){
             canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
             trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
 
             //Checar si las basuras no chocan con el bote (Falta cambiar)
             if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
-                //points +=10;
+                //En caso de caer al suelo, perder vida
                 life--;
                 Explosion explosion = new Explosion(context);
                 explosion.explosionX = trashesB.get(i).trashBX;
@@ -138,22 +129,7 @@ public class GameView extends View {
             }
         }
 
-        //Checar colisión con los botes
-/*        for (int i = 0; i< trashesB.size(); i++){
-            if (trashesB.get(i).trashBX + trashesB.get(i).getTrashWidth()>=dumpsterBX
-            && trashesB.get(i).trashBX <= dumpsterBX + dumpsterB.getWidth()
-            && trashesB.get(i).trashBY + trashesB.get(i).getTrashWidth()>=dumpstersY
-            && trashesB.get(i).trashBY + trashesB.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
-                //life--;
-                trashesB.get(i).resetPosition();
-                if(life == 0 || points == minPoints){
-                    Intent intent = new Intent(context, GameOver.class);
-                    intent.putExtra("points", points);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }
-            }
-        }*/
+
 
         //Dibujar explosiones (cuando chocan con el piso)
         for(int i =0; i<explosions.size();i++){
@@ -178,27 +154,8 @@ public class GameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Obtener toque
-        float touchX = event.getX();
-        float touchY = event.getY();
-        float shift;
+        float touchX = event.getX(), touchY = event.getY(), shift;
         int action;
-
-        //Colisión con las basuras
-        /*        for (int i = 0; i< trashesA.size(); i++){
-            if (trashesA.get(i).trashAX + trashesA.get(i).getTrashWidth()>=dumpsterBX
-            && trashesA.get(i).trashAX <= dumpsterBX + dumpsterB.getWidth()
-            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()>=dumpstersY
-            && trashesA.get(i).trashAY + trashesA.get(i).getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
-                //life--;
-                trashesA.get(i).resetPosition();
-                if(life == 0 || points == minPoints){
-                    Intent intent = new Intent(context, GameOver.class);
-                    intent.putExtra("points", points);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }
-            }
-        }*/
 
         for (int i = 0; i < trashesB.size(); i++) {
             Trash trashNow = trashesB.get(i);
@@ -222,6 +179,26 @@ public class GameView extends View {
                         trashNow.trashBX = dWidth - trashNow.getTrashWidth();
                     else
                         trashNow.trashBX = newTrashesBX;
+                }
+            }
+        }
+
+        //Colisión con boteB y mandar a pantalla de reinicio
+        for (int i = 0; i< trashesB.size(); i++){
+            Trash trashNow = trashesB.get(i);
+            //Si la longitud de la basura es mauor a
+            if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
+                    && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
+                    && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
+                    && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+                //life--;
+                points +=10;
+                trashNow.resetPosition();
+                if(life == 0 || points == minPoints){
+                    Intent intent = new Intent(context, GameOver.class);
+                    intent.putExtra("points", points);
+                    context.startActivity(intent);
+                    ((Activity)context).finish();
                 }
             }
         }

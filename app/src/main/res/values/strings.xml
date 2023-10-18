@@ -1,7 +1,7 @@
 <resources>
 
     <!--General-->
-    <string name="app_name">Save The Bunny Green Carson - GAME</string>
+    <string name="app_name">EXP - Green Carson - GAME</string>
 
     <!--Login screen-->
     <string name="userEmail">E-mail</string>
