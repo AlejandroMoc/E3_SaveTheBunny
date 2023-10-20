@@ -37,7 +37,6 @@ public class GameView extends View {
     Random random;
     ArrayList<Trash> trashesA, trashesB, trashesC, trashesD;
     ArrayList<Explosion> explosions;
-    ArrayList <Trash> trashes;
     Explosion explosion;
     Trash trash;
 
@@ -103,6 +102,9 @@ public class GameView extends View {
         //Generar basuras en arreglos
         //Falta ver si se puede convertir a un mapa
         for (i=0; i<trashDensity; i++){
+            //Falta añadir tipo de basura C y D
+            trash = new Trash(context, 1);
+            trashesA.add(trash);
             trash = new Trash(context, 2);
             trashesB.add(trash);
         }
@@ -111,29 +113,30 @@ public class GameView extends View {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
 
+        //Falta checar si no imprime 20 veces la pantalla de gameOver
         //Checar si es gameOver
-        for (i = 0; i< trashesB.size(); i++)
-            setGameOver();
+        setGameOver();
+
+
         if (!gameOver){
             super.onDraw(canvas);
-            //Dibujar fondo y piso
             canvas.drawBitmap(background, null, rectBackground, null);
             canvas.drawBitmap(ground, null, rectGround, null);
 
-            //Dibujar basurasB
+            //Dibujar basuras
             for (i = 0; i< trashDensity; i++){
+
+                canvas.drawBitmap(trashesA.get(i).getTrash(trashesA.get(i).trashFrame), trashesA.get(i).trashX, trashesA.get(i).trashY, null);
                 canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashFrame), trashesB.get(i).trashX, trashesB.get(i).trashY, null);
+
+                trashesA.get(i).trashY += trashesA.get(i).trashVelocity;
                 trashesB.get(i).trashY += trashesB.get(i).trashVelocity;
 
                 //Checar si las basuras no chocan con el bote (Falta cambiar)
                 if (trashesB.get(i).trashY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
                     //En caso de caer al suelo, perder vida
-                    life--;
-                    explosion = new Explosion(context);
-                    explosion.explosionX = trashesB.get(i).trashX;
-                    explosion.explosionY = trashesB.get(i).trashY;
-                    explosions.add(explosion);
-                    trashesB.get(i).resetTrash(2);
+                    ArrayList<Trash> trashy = trashesB;
+                    floorCollision(trashy);
                 }
             }
 
@@ -157,6 +160,15 @@ public class GameView extends View {
             canvas.drawText("x"+life, dWidth-150, Math.floorDiv(dHeight, 6)-lifeTextSize-80, lifeNumber);
             handler.postDelayed(runnable, UPDATE_MILLIS);
         }
+    }
+
+    private void floorCollision(ArrayList<Trash> trashy) {
+        life--;
+        explosion = new Explosion(context);
+        explosion.explosionX = trashy.get(i).trashX;
+        explosion.explosionY = trashy.get(i).trashY;
+        explosions.add(explosion);
+        trashy.get(i).resetTrash(2);
     }
 
     private void setGameOver() {
