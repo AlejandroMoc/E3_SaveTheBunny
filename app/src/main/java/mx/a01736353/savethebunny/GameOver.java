@@ -19,6 +19,7 @@ public class GameOver extends AppCompatActivity {
     TextView tvHighest;
     SharedPreferences sharedPreferences;
     ImageView ivNewHighest;
+    int winningState, points;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,8 +30,8 @@ public class GameOver extends AppCompatActivity {
         tvPoints = findViewById(R.id.tvPoints);
         tvHighest = findViewById(R.id.tvHighest);
         ivNewHighest = findViewById(R.id.ivNewHighest);
-        int points = Objects.requireNonNull(getIntent().getExtras()).getInt("points");
-        int winningState = Objects.requireNonNull(getIntent().getExtras()).getInt("winningState");
+        points = Objects.requireNonNull(getIntent().getExtras()).getInt("points");
+        winningState = Objects.requireNonNull(getIntent().getExtras()).getInt("winningState");
 
         tvPoints.setText(""+points);
         sharedPreferences=getSharedPreferences("my_pref",0);
@@ -54,24 +55,24 @@ public class GameOver extends AppCompatActivity {
     }
 
     //Seguramente se tenga que pasar el caracter tambien aqui
-    public void goToWinningState(View v){
+/*    public void goToWinningState(View v){
 
         //Dependiendo de si se ganó o perdió, pasar a distinta pantalla
         Intent intent = new Intent(this, TutorialActivity.class);
         startActivity(intent);
-    }
+    }*/
 
-    //FALTA CORREGIR ESTA
-/*    public void goToWinningState(View v, int winningState){
+    //AQUI AHORA FALTA CREAR SITUACION DE FRACASO
+    public void goToWinningState(View v){
         Intent intent;
-        //Dependiendo de si se ganó o perdió, pasar a distinta pantalla
         if (winningState==0){
-            intent = new Intent(this, TutorialActivity.class);
+            //Falta anexar información
+            intent = new Intent(this, WinningActivity.class);
         } else {
-            intent = new Intent(this, TutorialActivity.class);
+            intent = new Intent(this, WinningActivity.class);
         }
         startActivity(intent);
-    }*/
+    }
 
     //BORRAR, SOLO PARA TENERLO DE REFERENCIA
 /*    if(life==0){

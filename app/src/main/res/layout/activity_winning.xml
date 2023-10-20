@@ -25,7 +25,6 @@
         android:layout_marginEnd="30dp"
         android:background="@drawable/logo_foward"
         android:contentDescription="@string/help_button"
-        android:onClick="dialogSelectLevel"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,13 +63,13 @@
 
     <!--Imágen de-->
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageDecoration"
         android:layout_width="300dp"
         android:layout_height="500dp"
-        android:layout_marginBottom="-150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="400dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/winning_picture" />
+        app:layout_constraintTop_toTopOf="@+id/backgroundImageView"
+        app:srcCompat="@drawable/winning_decoration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
