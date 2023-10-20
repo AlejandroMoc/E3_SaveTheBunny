@@ -30,8 +30,8 @@ public class GameView extends View {
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
-    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newTrashesBX, newTrashesBY, touchX, touchY;
-    int points, winningState, minPoints = 500, life = 5, trashDensity=3, action, i;
+    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newtrashyX, newtrashyY, touchX, touchY;
+    int points, winningState, minPoints = 500, life = 5, trashDensity=3, action, i, trashType;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
     boolean gameOver = false;
     Random random;
@@ -160,17 +160,7 @@ public class GameView extends View {
         }
     }
 
-    private void floorCollision(ArrayList<Trash> trashy) {
-        if (trashy.get(i).trashY + trashy.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
-            life--;
-            explosion = new Explosion(context);
-            explosion.explosionX = trashy.get(i).trashX;
-            explosion.explosionY = trashy.get(i).trashY;
-            explosions.add(explosion);
-            trashy.get(i).resetTrash(trashy.get(i).trashTypeMine);
-        }
 
-    }
 
     private void setGameOver() {
         //Mandar a pantalla de reinicio o de aceptación
@@ -192,10 +182,23 @@ public class GameView extends View {
         touchX = event.getX();
         touchY = event.getY();
 
-        //AQUI AHORA
-        //Verificar colisión con botes
-        for (Trash trashNow : trashesB) {
-            //Si está en el límite con la altura de los botes
+        //Colisiones con botes
+        dumpstersCollision(event, trashesB);
+        return true;
+    }
+
+    //Funciones para colisiones
+    private void dumpstersCollision(MotionEvent event, ArrayList<Trash> trashy) {
+        for (Trash trashNow : trashy) {
+
+            //Obtener tipo de basura
+            //ESTO LO ROMPE Y NO SÉ POR QUÉ
+            //int trashTypejiji = trashy.get(i).trashTypeMine;
+
+            //VER COMO HACER QUE FUNCIONE ESTO
+            trashType = trashNow.trashTypeMine;
+
+            //Si se está tocando la basura
             if (touchY >= trashNow.trashY && touchY <= (trashNow.trashY + trashNow.getTrashHeight())
                     && touchX >= trashNow.trashX && touchX <= (trashNow.trashX + trashNow.getTrashWidth()))
             {
@@ -210,41 +213,83 @@ public class GameView extends View {
                 } else if (action == MotionEvent.ACTION_MOVE) {
                     trashNow.shifX = trashNow.oldX - touchX;
                     trashNow.shiftY = trashNow.oldY - touchY;
-                    newTrashesBX = trashNow.oldTrashX - trashNow.shifX;
-                    newTrashesBY = trashNow.oldTrashY - trashNow.shiftY;
+                    newtrashyX = trashNow.oldTrashX - trashNow.shifX;
+                    newtrashyY = trashNow.oldTrashY - trashNow.shiftY;
 
-                    //Mover en eje X y Y
-                    if (newTrashesBX <= 0)
+                    //Mover en ejes
+                    if (newtrashyX <= 0)
                         trashNow.trashX = 0;
-                    else if (newTrashesBX >= dWidth - trashNow.getTrashWidth())
+                    else if (newtrashyX >= dWidth - trashNow.getTrashWidth())
                         trashNow.trashX = dWidth - trashNow.getTrashWidth();
                     else
-                        trashNow.trashX = newTrashesBX;
-
-                    if (newTrashesBY <= 0)
+                        trashNow.trashX = newtrashyX;
+                    if (newtrashyY <= 0)
                         trashNow.trashY = 0;
-                    else if (newTrashesBY >= dHeight - trashNow.getTrashHeight())
+                    else if (newtrashyY >= dHeight - trashNow.getTrashHeight())
                         trashNow.trashY = dHeight - trashNow.getTrashHeight();
                     else
-                        trashNow.trashY = newTrashesBY;
+                        trashNow.trashY = newtrashyY;
 
-                    //Si choca con bote B es points++
-                    //Falta ver si es mejor extraer el método
-                    //o probablemente usar t0d0 el touchevent para los 3/4 botes
-                    if (trashNow.trashX + trashNow.getTrashWidth()>=dumpsterBX
-                            && trashNow.trashX <= dumpsterBX + dumpsterB.getWidth()
-                            && trashNow.trashY + trashNow.getTrashWidth()>=dumpstersY
-                            && trashNow.trashY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
-                        points +=10;
-                        //Falta usar valor custom
-                        trashNow.resetTrash(2);
+                    //AQUI FALTA REDIRIGIR EN BASE AL TIPO DE BASURA
+                    //tipo que B solo pueda entrar en B
+
+                    //Falta cambiar a cases
+                    if (trashType==1){
+
+                        //Bote correcto A
+
+                    } else if (trashType==2){
+
+                        //Bote correcto B
+                        dumpsterCollision(trashNow, dumpsterA, dumpsterAX, false);
+                        dumpsterCollision(trashNow, dumpsterB, dumpsterBX, true);
+                        //AQUI AHORA VER COMO SIMPLIFICAR DUMPSTERB Y DUMPSTERBX PARA DEPENDER DE UN SOLO VALOR
+
+                        //dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
+
+                    } else if (trashType==3){
+
+                        //Bote correcto C
+
+                    } else if (trashType==4){
+
+                        //Bote correcto D
+
                     }
 
-                    //FALTA Si choca con otro bote es life--
 
                 }
             }
         }
-        return true;
+    }
+
+    //AQUI AHORA VERIFICAR COMO SIMPLIFICAR DUMPSTER Y DUMPSTER X EN UN SOLO VALOR (sin ifs)
+    private void dumpsterCollision(Trash trashNow, Bitmap dumpster, float dumpsterX, boolean state) {
+
+        //AQUI AHORA falta permitir distinto bote
+        if (trashNow.trashX + trashNow.getTrashWidth()>=dumpsterX
+                && trashNow.trashX <= dumpsterX + dumpster.getWidth()
+                && trashNow.trashY + trashNow.getTrashWidth()>=dumpstersY
+                && trashNow.trashY + trashNow.getTrashWidth()<=dumpstersY + dumpster.getHeight()){
+
+            //Checar si es el bote correcto o no
+            if (state)
+                points +=10;
+            else life --;
+
+            trashNow.resetTrash(trashType);
+        }
+    }
+
+    private void floorCollision(ArrayList<Trash> trashy) {
+        if (trashy.get(i).trashY + trashy.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+            life--;
+            explosion = new Explosion(context);
+            explosion.explosionX = trashy.get(i).trashX;
+            explosion.explosionY = trashy.get(i).trashY;
+            explosions.add(explosion);
+            trashy.get(i).resetTrash(trashy.get(i).trashTypeMine);
+        }
+
     }
 }
