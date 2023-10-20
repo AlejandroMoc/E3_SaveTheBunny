@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
@@ -32,13 +31,15 @@ public class GameView extends View {
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
     float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newTrashesBX, newTrashesBY, touchX, touchY;
-    int points, winningState, minPoints = 500, life = 5, trashBSize=3, action, i;
+    int points, winningState, minPoints = 500, life = 5, trashDensity=3, action, i;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
     boolean gameOver = false;
     Random random;
-    ArrayList<Trash> trashesB;
+    ArrayList<Trash> trashesA, trashesB, trashesC, trashesD;
     ArrayList<Explosion> explosions;
+    ArrayList <Trash> trashes;
     Explosion explosion;
+    Trash trash;
 
     public GameView(
             Context context){
@@ -93,12 +94,16 @@ public class GameView extends View {
         dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
 
         //Arrays para elementos
+        trashesA= new ArrayList<>();
         trashesB = new ArrayList<>();
+        trashesC = new ArrayList<>();
+        trashesD = new ArrayList<>();
         explosions = new ArrayList<>();
 
-        //Generar basuras iniciales
-        for (i=0; i<trashBSize; i++){
-            Trash trash = new Trash(context);
+        //Generar basuras en arreglos
+        //Falta ver si se puede convertir a un mapa
+        for (i=0; i<trashDensity; i++){
+            trash = new Trash(context, 2);
             trashesB.add(trash);
         }
     }
@@ -116,7 +121,7 @@ public class GameView extends View {
             canvas.drawBitmap(ground, null, rectGround, null);
 
             //Dibujar basurasB
-            for (i = 0; i< trashBSize; i++){
+            for (i = 0; i< trashDensity; i++){
                 canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
                 trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
 
@@ -128,7 +133,7 @@ public class GameView extends View {
                     explosion.explosionX = trashesB.get(i).trashBX;
                     explosion.explosionY = trashesB.get(i).trashBY;
                     explosions.add(explosion);
-                    trashesB.get(i).resetPosition();
+                    trashesB.get(i).resetPosition(2);
                 }
             }
 
@@ -216,8 +221,9 @@ public class GameView extends View {
                             && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
                             && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                         points +=10;
-                        trashNow.resetPosition();
+                        trashNow.resetPosition(2);
                     }
+
                     //FALTA Si choca con otro bote es life--
 
                 }
