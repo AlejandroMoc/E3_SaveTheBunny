@@ -30,8 +30,9 @@ public class GameView extends View {
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
-    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newtrashyX, newtrashyY, touchX, touchY;
-    int points, winningState, minPoints = 500, life = 5, trashDensity=3, action, i, trashType;
+    //Falta verificar cuáles deben ser float y cuáles int
+    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newtrashyX, newtrashyY, touchX, touchY, dumpsterX;
+    int points, winningState, minPoints = 500, life = 5, trashDensity=2, action, i, trashType;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
     boolean gameOver = false;
     Random random;
@@ -54,6 +55,7 @@ public class GameView extends View {
         dumpsterB = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_2);
         dumpsterC = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_3);
         dumpsterD = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_4);
+        //Falta redimensionar para cuatro botes
         //dumpsterB = Bitmap.createScaledBitmap(dumpsterB, dumpsterB.getWidth()-dumpsterB.getWidth()/3, dumpsterB.getHeight()-dumpsterB.getHeight()/3, true);
 
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -228,28 +230,19 @@ public class GameView extends View {
                     else
                         trashNow.trashY = newtrashyY;
 
-                    //AQUI FALTA REDIRIGIR EN BASE AL TIPO DE BASURA
-                    //tipo que B solo pueda entrar en B
-
                     //Falta cambiar a cases
                     if (trashType==1){
-
-                        //Bote correcto A
-                        dumpsterCollision(trashNow, dumpsterA, dumpsterAX, true);
-                        dumpsterCollision(trashNow, dumpsterB, dumpsterBX, false);
-                        dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
-
+                        dumpsterCollision(trashNow, dumpsterA, true);
+                        dumpsterCollision(trashNow, dumpsterB, false);
+                        dumpsterCollision(trashNow, dumpsterC, false);
                     } else if (trashType==2){
-
-                        //Bote correcto B
-                        dumpsterCollision(trashNow, dumpsterA, dumpsterAX, false);
-                        dumpsterCollision(trashNow, dumpsterB, dumpsterBX, true);
-                        dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
-
+                        dumpsterCollision(trashNow, dumpsterA, false);
+                        dumpsterCollision(trashNow, dumpsterB, true);
+                        dumpsterCollision(trashNow, dumpsterC, false);
                     } else if (trashType==3){
-
-                        //Bote correcto C
-
+                        dumpsterCollision(trashNow, dumpsterA, false);
+                        dumpsterCollision(trashNow, dumpsterB, false);
+                        dumpsterCollision(trashNow, dumpsterC, true);
                     } else if (trashType==4){
 
                         //Bote correcto D
@@ -263,9 +256,19 @@ public class GameView extends View {
     }
 
     //AQUI AHORA VERIFICAR COMO SIMPLIFICAR DUMPSTER Y DUMPSTER X EN UN SOLO VALOR (sin ifs)
-    private void dumpsterCollision(Trash trashNow, Bitmap dumpster, float dumpsterX, boolean state) {
+    private void dumpsterCollision(Trash trashNow, Bitmap dumpster, boolean state) {
 
-        //AQUI AHORA falta permitir distinto bote
+        //Falta cambiar a cases
+        if (dumpster==dumpsterA){
+            dumpsterX=dumpsterAX;
+        } else if (dumpster==dumpsterB){
+            dumpsterX=dumpsterBX;
+        } else if (dumpster==dumpsterC){
+            dumpsterX=dumpsterCX;
+        } else if (dumpster==dumpsterD){
+            dumpsterX=dumpsterDX;
+        }
+
         if (trashNow.trashX + trashNow.getTrashWidth()>=dumpsterX
                 && trashNow.trashX <= dumpsterX + dumpster.getWidth()
                 && trashNow.trashY + trashNow.getTrashWidth()>=dumpstersY

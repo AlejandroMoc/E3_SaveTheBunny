@@ -48,7 +48,7 @@ public class Trash {
         trashX = random.nextInt(GameView.dWidth - getTrashWidth());
         trashY = -200 + random.nextInt(600) * -1;
         //Falta ver si vale la pena o no tener velocidad individual o por categoría
-        trashVelocity = 12 + random.nextInt(10);
+        trashVelocity = 8 + random.nextInt(12);
 
         //Aleatorizar gráfico de acuerdo con el tipo
         if (trashType == 1){
