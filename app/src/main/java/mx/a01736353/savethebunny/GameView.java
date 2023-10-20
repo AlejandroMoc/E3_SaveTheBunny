@@ -122,18 +122,18 @@ public class GameView extends View {
 
             //Dibujar basurasB
             for (i = 0; i< trashDensity; i++){
-                canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
-                trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
+                canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashFrame), trashesB.get(i).trashX, trashesB.get(i).trashY, null);
+                trashesB.get(i).trashY += trashesB.get(i).trashVelocity;
 
                 //Checar si las basuras no chocan con el bote (Falta cambiar)
-                if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+                if (trashesB.get(i).trashY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
                     //En caso de caer al suelo, perder vida
                     life--;
                     explosion = new Explosion(context);
-                    explosion.explosionX = trashesB.get(i).trashBX;
-                    explosion.explosionY = trashesB.get(i).trashBY;
+                    explosion.explosionX = trashesB.get(i).trashX;
+                    explosion.explosionY = trashesB.get(i).trashY;
                     explosions.add(explosion);
-                    trashesB.get(i).resetPosition(2);
+                    trashesB.get(i).resetTrash(2);
                 }
             }
 
@@ -181,8 +181,8 @@ public class GameView extends View {
 
         for (Trash trashNow : trashesB) {
             //Si está en el límite con la altura de los botes
-            if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())
-            && touchX >= trashNow.trashBX && touchX <= (trashNow.trashBX + trashNow.getTrashWidth()))
+            if (touchY >= trashNow.trashY && touchY <= (trashNow.trashY + trashNow.getTrashHeight())
+                    && touchX >= trashNow.trashX && touchX <= (trashNow.trashX + trashNow.getTrashWidth()))
             {
                 action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
@@ -190,38 +190,38 @@ public class GameView extends View {
                     trashNow.oldX = event.getX();
                     trashNow.oldY = event.getY();
                     //Obtener posición de basura
-                    trashNow.oldTrashesBX = trashNow.trashBX;
-                    trashNow.oldTrashesBY = trashNow.trashBY;
+                    trashNow.oldTrashX = trashNow.trashX;
+                    trashNow.oldTrashY = trashNow.trashY;
                 } else if (action == MotionEvent.ACTION_MOVE) {
                     trashNow.shifX = trashNow.oldX - touchX;
                     trashNow.shiftY = trashNow.oldY - touchY;
-                    newTrashesBX = trashNow.oldTrashesBX - trashNow.shifX;
-                    newTrashesBY = trashNow.oldTrashesBY - trashNow.shiftY;
+                    newTrashesBX = trashNow.oldTrashX - trashNow.shifX;
+                    newTrashesBY = trashNow.oldTrashY - trashNow.shiftY;
 
                     //Mover en eje X y Y
                     if (newTrashesBX <= 0)
-                        trashNow.trashBX = 0;
+                        trashNow.trashX = 0;
                     else if (newTrashesBX >= dWidth - trashNow.getTrashWidth())
-                        trashNow.trashBX = dWidth - trashNow.getTrashWidth();
+                        trashNow.trashX = dWidth - trashNow.getTrashWidth();
                     else
-                        trashNow.trashBX = newTrashesBX;
+                        trashNow.trashX = newTrashesBX;
 
                     if (newTrashesBY <= 0)
-                        trashNow.trashBY = 0;
+                        trashNow.trashY = 0;
                     else if (newTrashesBY >= dHeight - trashNow.getTrashHeight())
-                        trashNow.trashBY = dHeight - trashNow.getTrashHeight();
+                        trashNow.trashY = dHeight - trashNow.getTrashHeight();
                     else
-                        trashNow.trashBY = newTrashesBY;
+                        trashNow.trashY = newTrashesBY;
 
                     //Si choca con bote B es points++
                     //Falta ver si es mejor extraer el método
                     //o probablemente usar t0d0 el touchevent para los 3/4 botes
-                    if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
-                            && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
-                            && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
-                            && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+                    if (trashNow.trashX + trashNow.getTrashWidth()>=dumpsterBX
+                            && trashNow.trashX <= dumpsterBX + dumpsterB.getWidth()
+                            && trashNow.trashY + trashNow.getTrashWidth()>=dumpstersY
+                            && trashNow.trashY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                         points +=10;
-                        trashNow.resetPosition(2);
+                        trashNow.resetTrash(2);
                     }
 
                     //FALTA Si choca con otro bote es life--
