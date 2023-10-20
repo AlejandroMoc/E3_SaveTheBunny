@@ -110,6 +110,8 @@ public class GameView extends View {
             trashesA.add(trash);
             trash = new Trash(context, 2);
             trashesB.add(trash);
+            trash = new Trash(context, 3);
+            trashesC.add(trash);
         }
     }
 
@@ -131,13 +133,16 @@ public class GameView extends View {
 
                 canvas.drawBitmap(trashesA.get(i).getTrash(trashesA.get(i).trashFrame), trashesA.get(i).trashX, trashesA.get(i).trashY, null);
                 canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashFrame), trashesB.get(i).trashX, trashesB.get(i).trashY, null);
+                canvas.drawBitmap(trashesC.get(i).getTrash(trashesC.get(i).trashFrame), trashesC.get(i).trashX, trashesC.get(i).trashY, null);
 
                 trashesA.get(i).trashY += trashesA.get(i).trashVelocity;
                 trashesB.get(i).trashY += trashesB.get(i).trashVelocity;
+                trashesC.get(i).trashY += trashesC.get(i).trashVelocity;
 
                 //Checar colisión con piso
                 floorCollision(trashesA);
                 floorCollision(trashesB);
+                floorCollision(trashesC);
             }
 
             //Actualizar frames de explosiones
@@ -162,8 +167,7 @@ public class GameView extends View {
         }
     }
 
-
-
+    //Función para enviar a gameOver
     private void setGameOver() {
         //Mandar a pantalla de reinicio o de aceptación
         if(life==0){
@@ -188,6 +192,7 @@ public class GameView extends View {
         //AQUI AHORA checar cómo hacer para que las basuras no se junten al presionarlas si están en el mismo lugar
         movementCollision(event, trashesA);
         movementCollision(event, trashesB);
+        movementCollision(event, trashesC);
         return true;
     }
 

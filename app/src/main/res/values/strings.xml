@@ -68,4 +68,8 @@
     <string name="highest_score">Puntaje más alto: </string>
     <string name="dialog_restart">Reiniciar nivel</string>
 
+
+    <string name="winning_dialog">¡Limpiaste\nel mundo!</string>
+
+
 </resources>

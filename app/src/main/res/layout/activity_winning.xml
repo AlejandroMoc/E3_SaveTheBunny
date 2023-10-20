@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WinningActivity">
+    <!--android:background="@drawable/background_tilesparent"-->
+
+    <!--Fondo de aplicación-->
+    <ImageView
+        android:id="@+id/backgroundImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_tiles"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/background" />
+
+    <!--Botón de Siguiente-->
+    <Button
+        android:id="@+id/levelName"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/logo_foward"
+        android:contentDescription="@string/help_button"
+        android:onClick="dialogSelectLevel"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Parte de basic tutorial-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/state"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/gradient_button3"
+        android:contentDescription="@string/bas_levelSel"
+        android:text="@string/winning_dialog"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonBasic" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonBasic"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/gradient_button3"
+        android:contentDescription="@string/bas_levelSel"
+        android:text="@string/basicLevel"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backgroundImageView" />
+
+    <!--Imágen de-->
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="300dp"
+        android:layout_height="500dp"
+        android:layout_marginBottom="-150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/winning_picture" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

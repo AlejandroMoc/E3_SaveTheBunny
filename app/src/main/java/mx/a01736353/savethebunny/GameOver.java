@@ -1,5 +1,6 @@
 package mx.a01736353.savethebunny;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,8 +55,35 @@ public class GameOver extends AppCompatActivity {
 
     //Seguramente se tenga que pasar el caracter tambien aqui
     public void goToWinningState(View v){
+
+        //Dependiendo de si se ganó o perdió, pasar a distinta pantalla
         Intent intent = new Intent(this, TutorialActivity.class);
         startActivity(intent);
     }
+
+    //FALTA CORREGIR ESTA
+/*    public void goToWinningState(View v, int winningState){
+        Intent intent;
+        //Dependiendo de si se ganó o perdió, pasar a distinta pantalla
+        if (winningState==0){
+            intent = new Intent(this, TutorialActivity.class);
+        } else {
+            intent = new Intent(this, TutorialActivity.class);
+        }
+        startActivity(intent);
+    }*/
+
+    //BORRAR, SOLO PARA TENERLO DE REFERENCIA
+/*    if(life==0){
+        if(points >= minPoints){winningState=1;}
+        else{winningState=0;}
+        Intent intent = new Intent(context, GameOver.class);
+        intent.putExtra("points", points);
+        intent.putExtra("winningState", winningState);
+        ((Activity)context).finish();
+        context.startActivity(intent);
+        gameOver=true;
+    }*/
+
 
 }

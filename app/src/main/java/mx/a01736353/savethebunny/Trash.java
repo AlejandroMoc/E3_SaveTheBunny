@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Trash {
     public int trashTypeMine;
-    Bitmap[] trash =new Bitmap[6];
+    Bitmap[] trash =new Bitmap[9];
     Random random = new Random();
     int trashFrame;
     float trashX, trashY, trashVelocity, oldTrashX, oldTrashY, oldX, oldY, shifX, shiftY;
@@ -27,6 +27,11 @@ public class Trash {
         trash[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b1);
         trash[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b2);
         trash[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b3);
+
+        //Basura tipo C
+        trash[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_c1);
+        trash[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_c2);
+        trash[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_c3);
 
         //Crear estado y posición inicial
         resetTrash(trashType);
@@ -48,7 +53,7 @@ public class Trash {
         trashX = random.nextInt(GameView.dWidth - getTrashWidth());
         trashY = -200 + random.nextInt(600) * -1;
         //Falta ver si vale la pena o no tener velocidad individual o por categoría
-        trashVelocity = 8 + random.nextInt(12);
+        trashVelocity = 4 + random.nextInt(4);
 
         //Aleatorizar gráfico de acuerdo con el tipo
         if (trashType == 1){
@@ -56,7 +61,7 @@ public class Trash {
         } else if (trashType == 2){
             trashFrame = new Random().nextInt(3) + 3;
         } else if (trashType == 3){
-            trashFrame = new Random().nextInt(3);
+            trashFrame = new Random().nextInt(3) + 6;
         } else if (trashType == 4){
             trashFrame = new Random().nextInt(3);
         }
