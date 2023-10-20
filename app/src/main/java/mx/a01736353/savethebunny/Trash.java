@@ -35,7 +35,7 @@ public class Trash {
     public void resetPosition() {
         trashBX = random.nextInt(GameView.dWidth - getTrashWidth());
         trashBY = -200 + random.nextInt(600) * -1;
-        trashBVelocity = 10 + random.nextInt(16);
+        trashBVelocity = 10 + random.nextInt(10);
         trashBFrame = new Random().nextInt(3);
     }
 }

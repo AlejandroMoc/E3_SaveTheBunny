@@ -15,8 +15,11 @@ import android.os.Handler;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class GameView extends View {
@@ -35,6 +38,8 @@ public class GameView extends View {
     Random random;
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
+    Explosion explosion;
+
     public GameView(
             Context context){
         super(context);
@@ -80,10 +85,11 @@ public class GameView extends View {
         random = new Random();
 
         //Posición de los botes
-        dumpsterAX= dWidth/20;
-        dumpsterBX = dWidth/2-dumpsterB.getWidth()/2;
-        dumpsterCX = dWidth-dumpsterB.getWidth()-dWidth/20;
-        //AQUI FALTA LO DE D
+        dumpsterAX= Math.floorDiv(dWidth,20);
+        dumpsterBX = Math.floorDiv(dWidth,2)-Math.floorDiv(dumpsterB.getWidth(),2);
+        dumpsterCX = dWidth-dumpsterB.getWidth()-dumpsterAX;
+        //Falta cambiar para nivel avanzado
+        dumpsterDX = dWidth-dumpsterC.getWidth()-dumpsterBX;
         dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
 
         //Arrays para elementos
@@ -98,7 +104,8 @@ public class GameView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
+
         //Checar si es gameOver
         for (int i = 0; i< trashesB.size(); i++)
             setGameOver();
@@ -117,7 +124,7 @@ public class GameView extends View {
                 if (trashesB.get(i).trashBY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
                     //En caso de caer al suelo, perder vida
                     life--;
-                    Explosion explosion = new Explosion(context);
+                    explosion = new Explosion(context);
                     explosion.explosionX = trashesB.get(i).trashBX;
                     explosion.explosionY = trashesB.get(i).trashBY;
                     explosions.add(explosion);
@@ -126,12 +133,14 @@ public class GameView extends View {
             }
 
             //Actualizar frames de explosiones
-            for(int i =0; i<explosions.size();i++){
-                canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
-                        explosions.get(i).explosionY, null);
-                explosions.get(i).explosionFrame++;
-                if (explosions.get(i).explosionFrame>3)
-                    explosions.remove(i);
+            Iterator<Explosion> iterator = explosions.iterator();
+            while (iterator.hasNext()) {
+                explosion = iterator.next();
+                canvas.drawBitmap(explosion.getExplosion(explosion.explosionFrame), explosion.explosionX, explosion.explosionY, null);
+                explosion.explosionFrame++;
+                if (explosion.explosionFrame > 3) {
+                    iterator.remove();
+                }
             }
 
             //Dibujar interfaz
@@ -139,8 +148,8 @@ public class GameView extends View {
             canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
             canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
             heartDrawable.draw(canvas);
-            canvas.drawText(""+points+"/500", dWidth/2-200, dHeight/7-pointsTextSize, pointsNumber);
-            canvas.drawText("x"+life, dWidth-150, dHeight/6-lifeTextSize-80, lifeNumber);
+            canvas.drawText(""+points+"/500", Math.floorDiv(dWidth,2)-200, Math.floorDiv(dHeight,7)-pointsTextSize, pointsNumber);
+            canvas.drawText("x"+life, dWidth-150, Math.floorDiv(dHeight, 6)-lifeTextSize-80, lifeNumber);
             handler.postDelayed(runnable, UPDATE_MILLIS);
         }
     }
@@ -208,13 +217,6 @@ public class GameView extends View {
                             && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
                             && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                         points +=10;
-
-                        //Codigo para meter explosiones (Posiblemente borrar)
-                        /*Explosion explosion = new Explosion(context);
-                        explosion.explosionX = trashesB.get(i).trashBX;
-                        explosion.explosionY = trashesB.get(i).trashBY;
-                        explosions.add(explosion);*/
-
                         trashNow.resetPosition();
                     }
                     //FALTA Si choca con otro bote es life--
