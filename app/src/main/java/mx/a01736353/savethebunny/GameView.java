@@ -31,8 +31,8 @@ public class GameView extends View {
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
-    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY;
-    int points = 0, winningState, minPoints = 500, life = 5,  trashBSize=3;
+    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newTrashesBX, newTrashesBY, touchX, touchY;
+    int points, winningState, minPoints = 500, life = 5, trashBSize=3, action, i;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
     boolean gameOver = false;
     Random random;
@@ -97,7 +97,7 @@ public class GameView extends View {
         explosions = new ArrayList<>();
 
         //Generar basuras iniciales
-        for (int i=0; i<trashBSize; i++){
+        for (i=0; i<trashBSize; i++){
             Trash trash = new Trash(context);
             trashesB.add(trash);
         }
@@ -107,7 +107,7 @@ public class GameView extends View {
     protected void onDraw(@NonNull Canvas canvas) {
 
         //Checar si es gameOver
-        for (int i = 0; i< trashesB.size(); i++)
+        for (i = 0; i< trashesB.size(); i++)
             setGameOver();
         if (!gameOver){
             super.onDraw(canvas);
@@ -116,7 +116,7 @@ public class GameView extends View {
             canvas.drawBitmap(ground, null, rectGround, null);
 
             //Dibujar basurasB
-            for (int i = 0; i< trashBSize; i++){
+            for (i = 0; i< trashBSize; i++){
                 canvas.drawBitmap(trashesB.get(i).getTrash(trashesB.get(i).trashBFrame), trashesB.get(i).trashBX, trashesB.get(i).trashBY, null);
                 trashesB.get(i).trashBY += trashesB.get(i).trashBVelocity;
 
@@ -171,13 +171,10 @@ public class GameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Obtener toque
-        float touchX = event.getX();
-        float touchY = event.getY();
-        Trash trashNow;
-        int action;
+        touchX = event.getX();
+        touchY = event.getY();
 
-        for (int i = 0; i < trashesB.size(); i++) {
-            trashNow = trashesB.get(i);
+        for (Trash trashNow : trashesB) {
             //Si está en el límite con la altura de los botes
             if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())
             && touchX >= trashNow.trashBX && touchX <= (trashNow.trashBX + trashNow.getTrashWidth()))
@@ -193,8 +190,8 @@ public class GameView extends View {
                 } else if (action == MotionEvent.ACTION_MOVE) {
                     trashNow.shifX = trashNow.oldX - touchX;
                     trashNow.shiftY = trashNow.oldY - touchY;
-                    float newTrashesBX = trashNow.oldTrashesBX - trashNow.shifX;
-                    float newTrashesBY = trashNow.oldTrashesBY - trashNow.shiftY;
+                    newTrashesBX = trashNow.oldTrashesBX - trashNow.shifX;
+                    newTrashesBY = trashNow.oldTrashesBY - trashNow.shiftY;
 
                     //Mover en eje X y Y
                     if (newTrashesBX <= 0)
@@ -212,6 +209,8 @@ public class GameView extends View {
                         trashNow.trashBY = newTrashesBY;
 
                     //Si choca con bote B es points++
+                    //Falta ver si es mejor extraer el método
+                    //o probablemente usar t0d0 el touchevent para los 3/4 botes
                     if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
                             && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
                             && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
@@ -221,7 +220,6 @@ public class GameView extends View {
                     }
                     //FALTA Si choca con otro bote es life--
 
-                    return true;        //Falta verificar si es posible quitar los trues (Parece que debo dejarlos)
                 }
             }
         }
