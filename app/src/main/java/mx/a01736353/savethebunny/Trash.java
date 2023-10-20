@@ -10,7 +10,7 @@ public class Trash {
     Bitmap trashB[]=new Bitmap[3];
     Random random;
     int trashBFrame = new Random().nextInt(3);
-    float trashBX,trashBY, trashBVelocity, oldTrashesBX, oldTrashesBY;
+    float trashBX,trashBY, trashBVelocity, oldTrashesBX, oldTrashesBY, oldX, oldY, shifX, shiftY;
 
     public Trash(Context context){
         //Falta cambiar esto por las basuras

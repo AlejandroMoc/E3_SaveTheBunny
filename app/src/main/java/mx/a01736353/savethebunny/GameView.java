@@ -28,12 +28,11 @@ public class GameView extends View {
     final long UPDATE_MILLIS = 30;
     Runnable runnable;
     Paint pointsNumber = new Paint(), lifeNumber = new Paint();
-    float pointsTextSize = 120, lifeTextSize = 70;
+    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY;
     int points = 0, winningState, minPoints = 500, life = 5,  trashBSize=3;
     static int dWidth, dHeight, heartSize=120, heartMargin=100;
     boolean gameOver = false;
     Random random;
-    float dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, oldX, oldY;
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
     public GameView(
@@ -108,7 +107,7 @@ public class GameView extends View {
         //Checar si es gameOver
         for (int i = 0; i< trashesB.size(); i++)
             setGameOver();
-        if (gameOver == false){
+        if (!gameOver){
             super.onDraw(canvas);
             //Dibujar fondo y piso
             canvas.drawBitmap(background, null, rectBackground, null);
@@ -131,14 +130,13 @@ public class GameView extends View {
                 }
             }
 
-            //Dibujar explosiones (cuando chocan con el piso)
+            //Actualizar frames de explosiones
             for(int i =0; i<explosions.size();i++){
                 canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).explosionX,
                         explosions.get(i).explosionY, null);
                 explosions.get(i).explosionFrame++;
-                if (explosions.get(i).explosionFrame>3){
+                if (explosions.get(i).explosionFrame>3)
                     explosions.remove(i);
-                }
             }
 
             //Dibujar interfaz
@@ -169,29 +167,32 @@ public class GameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Obtener toque
-        float touchX = event.getX(), touchY = event.getY(), shiftX, shiftY;
+        float touchX = event.getX();
+        float touchY = event.getY();
+        Trash trashNow;
         int action;
+        Trash activeTrash = null;
 
         for (int i = 0; i < trashesB.size(); i++) {
-            Trash trashNow = trashesB.get(i);
+
+            trashNow = trashesB.get(i);
             if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())) {
                 action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
-                    // Obtener toque en X
-                    oldX = event.getX();
-                    // Obtener toque en Y
-                    oldY = event.getY();
-                    // Obtener posición de basura
+                    //Obtener toque
+                    trashNow.oldX = event.getX();
+                    trashNow.oldY = event.getY();
+                    //Obtener posición de basura
                     trashNow.oldTrashesBX = trashNow.trashBX;
                     trashNow.oldTrashesBY = trashNow.trashBY;
                 }
                 if (action == MotionEvent.ACTION_MOVE) {
-                    shiftX = oldX - touchX;
-                    shiftY = oldY - touchY;
-                    float newTrashesBX = trashNow.oldTrashesBX - shiftX;
-                    float newTrashesBY = trashNow.oldTrashesBY - shiftY;
+                    trashNow.shifX = trashNow.oldX - touchX;
+                    trashNow.shiftY = trashNow.oldY - touchY;
+                    float newTrashesBX = trashNow.oldTrashesBX - trashNow.shifX;
+                    float newTrashesBY = trashNow.oldTrashesBY - trashNow.shiftY;
 
-                    // Mover elemento en el eje X
+                    //Mover en eje X y Y
                     if (newTrashesBX <= 0)
                         trashNow.trashBX = 0;
                     else if (newTrashesBX >= dWidth - trashNow.getTrashWidth())
@@ -199,7 +200,6 @@ public class GameView extends View {
                     else
                         trashNow.trashBX = newTrashesBX;
 
-                    // Mover elemento en el eje Y
                     if (newTrashesBY <= 0)
                         trashNow.trashBY = 0;
                     else if (newTrashesBY >= dHeight - trashNow.getTrashHeight())
@@ -208,29 +208,22 @@ public class GameView extends View {
                         trashNow.trashBY = newTrashesBY;
                 }
             }
-        }
 
-        //Colisión con boteB y mandar a pantalla de reinicio
-        for (int i = 0; i< trashesB.size(); i++){
-            Trash trashNow = trashesB.get(i);
             //Si choca con bote B es points++
             if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
                     && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
                     && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
                     && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                 points +=10;
+                //Codigo para meter explosiones
+/*                Explosion explosion = new Explosion(context);
+                explosion.explosionX = trashesB.get(i).trashBX;
+                explosion.explosionY = trashesB.get(i).trashBY;
+                explosions.add(explosion);*/
+
                 trashNow.resetPosition();
-
-                //Codigo antiguamente utilizado (parece que tampoco funciona)
-/*                if(life == 0 || points == minPoints){
-                    Intent intent = new Intent(context, GameOver.class);
-                    intent.putExtra("points", points);
-                    //winningState=0;
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }*/
-
             }
+            //FALTA PONER COLISIONES PARA DEMAS BOTES
         }
 
         // Mover botes (ya no es necesario)
@@ -240,14 +233,14 @@ public class GameView extends View {
             // Si la acción es estar presionando la pantalla
             if (action == MotionEvent.ACTION_DOWN) {
                 // Obtener el toque del dedo en X
-                oldX = event.getX();
+                trashNow.oldX = event.getX();
                 // Obtener posición del cubo de basura
                 olddumpsterBX = dumpsterBX;
             }
             // Si la acción es mover la pantalla
             if (action == MotionEvent.ACTION_MOVE) {
                 // Calcular shift en base al toque
-                shift = oldX - touchX;
+                shift = trashNow.oldX - touchX;
                 float newdumpsterBX = olddumpsterBX - shift;
                 // Mover bote
                 if (newdumpsterBX <= 0)

@@ -41,7 +41,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/logo_back"
+        android:background="@drawable/logo_foward"
         android:contentDescription="@string/dialog_leave"
         android:onClick="goToWinningState"
         app:layout_constraintEnd_toEndOf="parent"

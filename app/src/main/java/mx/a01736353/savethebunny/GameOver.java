@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 public class GameOver extends AppCompatActivity {
 
     TextView tvPoints;
@@ -26,8 +28,8 @@ public class GameOver extends AppCompatActivity {
         tvPoints = findViewById(R.id.tvPoints);
         tvHighest = findViewById(R.id.tvHighest);
         ivNewHighest = findViewById(R.id.ivNewHighest);
-        int points = getIntent().getExtras().getInt("points");
-        int winningState = getIntent().getExtras().getInt("winningState");
+        int points = Objects.requireNonNull(getIntent().getExtras()).getInt("points");
+        int winningState = Objects.requireNonNull(getIntent().getExtras()).getInt("winningState");
 
         tvPoints.setText(""+points);
         sharedPreferences=getSharedPreferences("my_pref",0);
