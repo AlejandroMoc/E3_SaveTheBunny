@@ -183,19 +183,17 @@ public class GameView extends View {
         touchY = event.getY();
 
         //Colisiones con botes
-        dumpstersCollision(event, trashesB);
+        //AQUI AHORA checar cómo hacer para que las basuras no se junten al presionarlas si están en el mismo lugar
+        movementCollision(event, trashesA);
+        movementCollision(event, trashesB);
         return true;
     }
 
     //Funciones para colisiones
-    private void dumpstersCollision(MotionEvent event, ArrayList<Trash> trashy) {
+    private void movementCollision(MotionEvent event, ArrayList<Trash> trashy) {
         for (Trash trashNow : trashy) {
 
             //Obtener tipo de basura
-            //ESTO LO ROMPE Y NO SÉ POR QUÉ
-            //int trashTypejiji = trashy.get(i).trashTypeMine;
-
-            //VER COMO HACER QUE FUNCIONE ESTO
             trashType = trashNow.trashTypeMine;
 
             //Si se está tocando la basura
@@ -237,15 +235,16 @@ public class GameView extends View {
                     if (trashType==1){
 
                         //Bote correcto A
+                        dumpsterCollision(trashNow, dumpsterA, dumpsterAX, true);
+                        dumpsterCollision(trashNow, dumpsterB, dumpsterBX, false);
+                        dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
 
                     } else if (trashType==2){
 
                         //Bote correcto B
                         dumpsterCollision(trashNow, dumpsterA, dumpsterAX, false);
                         dumpsterCollision(trashNow, dumpsterB, dumpsterBX, true);
-                        //AQUI AHORA VER COMO SIMPLIFICAR DUMPSTERB Y DUMPSTERBX PARA DEPENDER DE UN SOLO VALOR
-
-                        //dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
+                        dumpsterCollision(trashNow, dumpsterC, dumpsterCX, false);
 
                     } else if (trashType==3){
 
