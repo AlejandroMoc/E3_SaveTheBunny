@@ -39,6 +39,7 @@ public class GameView extends View {
     ArrayList<Explosion> explosions;
     Explosion explosion;
     Trash trash;
+    Iterator<Explosion> iterator;
 
     public GameView(
             Context context){
@@ -123,7 +124,7 @@ public class GameView extends View {
             canvas.drawBitmap(background, null, rectBackground, null);
             canvas.drawBitmap(ground, null, rectGround, null);
 
-            //Dibujar basuras
+            //Dibujar basuras, por ahora todas con la misma densidad
             for (i = 0; i< trashDensity; i++){
 
                 canvas.drawBitmap(trashesA.get(i).getTrash(trashesA.get(i).trashFrame), trashesA.get(i).trashX, trashesA.get(i).trashY, null);
@@ -132,16 +133,13 @@ public class GameView extends View {
                 trashesA.get(i).trashY += trashesA.get(i).trashVelocity;
                 trashesB.get(i).trashY += trashesB.get(i).trashVelocity;
 
-                //Checar si las basuras no chocan con el bote (Falta cambiar)
-                if (trashesB.get(i).trashY + trashesB.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
-                    //En caso de caer al suelo, perder vida
-                    ArrayList<Trash> trashy = trashesB;
-                    floorCollision(trashy);
-                }
+                //Checar colisión con piso
+                floorCollision(trashesA);
+                floorCollision(trashesB);
             }
 
             //Actualizar frames de explosiones
-            Iterator<Explosion> iterator = explosions.iterator();
+            iterator = explosions.iterator();
             while (iterator.hasNext()) {
                 explosion = iterator.next();
                 canvas.drawBitmap(explosion.getExplosion(explosion.explosionFrame), explosion.explosionX, explosion.explosionY, null);
@@ -151,7 +149,7 @@ public class GameView extends View {
                 }
             }
 
-            //Dibujar interfaz
+            //Dibujar elementos
             canvas.drawBitmap(dumpsterA, dumpsterAX, dumpstersY, null);
             canvas.drawBitmap(dumpsterB, dumpsterBX, dumpstersY, null);
             canvas.drawBitmap(dumpsterC, dumpsterCX, dumpstersY, null);
@@ -163,12 +161,15 @@ public class GameView extends View {
     }
 
     private void floorCollision(ArrayList<Trash> trashy) {
-        life--;
-        explosion = new Explosion(context);
-        explosion.explosionX = trashy.get(i).trashX;
-        explosion.explosionY = trashy.get(i).trashY;
-        explosions.add(explosion);
-        trashy.get(i).resetTrash(2);
+        if (trashy.get(i).trashY + trashy.get(i).getTrashHeight()>=dHeight-ground.getHeight()){
+            life--;
+            explosion = new Explosion(context);
+            explosion.explosionX = trashy.get(i).trashX;
+            explosion.explosionY = trashy.get(i).trashY;
+            explosions.add(explosion);
+            trashy.get(i).resetTrash(trashy.get(i).trashTypeMine);
+        }
+
     }
 
     private void setGameOver() {
@@ -191,6 +192,8 @@ public class GameView extends View {
         touchX = event.getX();
         touchY = event.getY();
 
+        //AQUI AHORA
+        //Verificar colisión con botes
         for (Trash trashNow : trashesB) {
             //Si está en el límite con la altura de los botes
             if (touchY >= trashNow.trashY && touchY <= (trashNow.trashY + trashNow.getTrashHeight())
@@ -233,6 +236,7 @@ public class GameView extends View {
                             && trashNow.trashY + trashNow.getTrashWidth()>=dumpstersY
                             && trashNow.trashY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
                         points +=10;
+                        //Falta usar valor custom
                         trashNow.resetTrash(2);
                     }
 

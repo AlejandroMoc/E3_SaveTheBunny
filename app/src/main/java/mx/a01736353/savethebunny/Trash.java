@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import java.util.Random;
 
 public class Trash {
+    public int trashTypeMine;
     Bitmap[] trash =new Bitmap[6];
     Random random = new Random();
     int trashFrame;
@@ -14,6 +15,8 @@ public class Trash {
 
     //Constructor
     public Trash(Context context, int trashType){
+
+        trashTypeMine= trashType;
 
         //Basura tipo A
         trash[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_a1);
@@ -24,9 +27,6 @@ public class Trash {
         trash[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b1);
         trash[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b2);
         trash[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b3);
-
-
-
 
         //Crear estado y posición inicial
         resetTrash(trashType);
@@ -47,6 +47,7 @@ public class Trash {
     public void resetTrash(int trashType) {
         trashX = random.nextInt(GameView.dWidth - getTrashWidth());
         trashY = -200 + random.nextInt(600) * -1;
+        //Falta ver si vale la pena o no tener velocidad individual o por categoría
         trashVelocity = 12 + random.nextInt(10);
 
         //Aleatorizar gráfico de acuerdo con el tipo
