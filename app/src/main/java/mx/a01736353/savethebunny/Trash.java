@@ -11,7 +11,6 @@ public class Trash {
     Random random;
     int trashBFrame = new Random().nextInt(3);
     float trashBX,trashBY, trashBVelocity, oldTrashesBX, oldTrashesBY, oldX, oldY, shifX, shiftY;
-
     public Trash(Context context){
         //Falta cambiar esto por las basuras
         trashB[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_b1);

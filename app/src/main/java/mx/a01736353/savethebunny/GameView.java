@@ -36,71 +36,66 @@ public class GameView extends View {
     ArrayList<Trash> trashesB;
     ArrayList<Explosion> explosions;
     public GameView(
-        Context context){
-            super(context);
-            this.context = context;
+            Context context){
+        super(context);
+        this.context = context;
 
-            background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
-            ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground2);
-            heart = BitmapFactory.decodeResource(getResources(), R.drawable.logo_heart);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.background_tiles);
+        ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground2);
+        heart = BitmapFactory.decodeResource(getResources(), R.drawable.logo_heart);
 
-            dumpsterA = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
-            dumpsterB = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_2);
-            dumpsterC = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_3);
-            dumpsterD = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_4);
-            //dumpsterB = Bitmap.createScaledBitmap(dumpsterB, dumpsterB.getWidth()-dumpsterB.getWidth()/3, dumpsterB.getHeight()-dumpsterB.getHeight()/3, true);
+        dumpsterA = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_1);
+        dumpsterB = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_2);
+        dumpsterC = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_3);
+        dumpsterD = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_4);
+        //dumpsterB = Bitmap.createScaledBitmap(dumpsterB, dumpsterB.getWidth()-dumpsterB.getWidth()/3, dumpsterB.getHeight()-dumpsterB.getHeight()/3, true);
 
-            Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            dWidth = size.x;
-            dHeight = size.y;
+        Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        dWidth = size.x;
+        dHeight = size.y;
 
-            //Rectangulos para fondo y piso
-            rectBackground = new Rect(0,0,dWidth,dHeight);
-            rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
-            rectHeart = new Rect(0,0,dWidth,dHeight);
-            handler = new Handler();
-            runnable = new Runnable() {
-                @Override
-                public void run() {
-                    invalidate();
-                }
-            };
+        //Rectangulos para fondo y piso
+        rectBackground = new Rect(0,0,dWidth,dHeight);
+        rectGround= new Rect(0,dHeight-ground.getHeight(),dWidth,dHeight);
+        rectHeart = new Rect(0,0,dWidth,dHeight);
+        handler = new Handler();
+        runnable = this::invalidate;
 
-            pointsNumber.setColor(ContextCompat.getColor(context, R.color.black));
-            pointsNumber.setTextSize(pointsTextSize);
-            pointsNumber.setTextAlign(Paint.Align.LEFT);
-            pointsNumber.setTypeface(Typeface.DEFAULT_BOLD);
-            //pointsNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
+        pointsNumber.setColor(ContextCompat.getColor(context, R.color.black));
+        pointsNumber.setTextSize(pointsTextSize);
+        pointsNumber.setTextAlign(Paint.Align.LEFT);
+        pointsNumber.setTypeface(Typeface.DEFAULT_BOLD);
+        //pointsNumber.setTypeface(ResourcesCompat.getFont(context, R.font.kenney_blocks));
 
-            lifeNumber.setColor(ContextCompat.getColor(context, R.color.black));
-            lifeNumber.setTextSize(lifeTextSize);
-            lifeNumber.setTextAlign(Paint.Align.LEFT);
-            lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
+        lifeNumber.setColor(ContextCompat.getColor(context, R.color.black));
+        lifeNumber.setTextSize(lifeTextSize);
+        lifeNumber.setTextAlign(Paint.Align.LEFT);
+        lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
 
-            heartDrawable.setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
-            heartDrawable.setBounds(dWidth - heartSize - heartMargin, heartMargin, dWidth - heartMargin, heartMargin + heartSize);
+        heartDrawable.setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
+        heartDrawable.setBounds(dWidth - heartSize - heartMargin, heartMargin, dWidth - heartMargin, heartMargin + heartSize);
 
-            random = new Random();
+        random = new Random();
 
-            //Posición de los botes
-            dumpsterAX= dWidth/20;
-            dumpsterBX = dWidth/2-dumpsterB.getWidth()/2;
-            dumpsterCX = dWidth-dumpsterB.getWidth()-dWidth/20;
-            //AQUI FALTA LO DE D
-            dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
+        //Posición de los botes
+        dumpsterAX= dWidth/20;
+        dumpsterBX = dWidth/2-dumpsterB.getWidth()/2;
+        dumpsterCX = dWidth-dumpsterB.getWidth()-dWidth/20;
+        //AQUI FALTA LO DE D
+        dumpstersY = dHeight - ground.getHeight() - dumpsterB.getHeight()+100;
 
-            //Arrays para elementos
-            trashesB = new ArrayList<>();
-            explosions = new ArrayList<>();
+        //Arrays para elementos
+        trashesB = new ArrayList<>();
+        explosions = new ArrayList<>();
 
-            //Generar basuras iniciales
-            for (int i=0; i<trashBSize; i++){
-                Trash trash = new Trash(context);
-                trashesB.add(trash);
-            }
+        //Generar basuras iniciales
+        for (int i=0; i<trashBSize; i++){
+            Trash trash = new Trash(context);
+            trashesB.add(trash);
         }
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -171,12 +166,13 @@ public class GameView extends View {
         float touchY = event.getY();
         Trash trashNow;
         int action;
-        Trash activeTrash = null;
 
         for (int i = 0; i < trashesB.size(); i++) {
-
             trashNow = trashesB.get(i);
-            if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())) {
+            //Si está en el límite con la altura de los botes
+            if (touchY >= trashNow.trashBY && touchY <= (trashNow.trashBY + trashNow.getTrashHeight())
+            && touchX >= trashNow.trashBX && touchX <= (trashNow.trashBX + trashNow.getTrashWidth()))
+            {
                 action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
                     //Obtener toque
@@ -185,8 +181,7 @@ public class GameView extends View {
                     //Obtener posición de basura
                     trashNow.oldTrashesBX = trashNow.trashBX;
                     trashNow.oldTrashesBY = trashNow.trashBY;
-                }
-                if (action == MotionEvent.ACTION_MOVE) {
+                } else if (action == MotionEvent.ACTION_MOVE) {
                     trashNow.shifX = trashNow.oldX - touchX;
                     trashNow.shiftY = trashNow.oldY - touchY;
                     float newTrashesBX = trashNow.oldTrashesBX - trashNow.shifX;
@@ -206,51 +201,28 @@ public class GameView extends View {
                         trashNow.trashBY = dHeight - trashNow.getTrashHeight();
                     else
                         trashNow.trashBY = newTrashesBY;
+
+                    //Si choca con bote B es points++
+                    if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
+                            && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
+                            && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
+                            && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
+                        points +=10;
+
+                        //Codigo para meter explosiones (Posiblemente borrar)
+                        /*Explosion explosion = new Explosion(context);
+                        explosion.explosionX = trashesB.get(i).trashBX;
+                        explosion.explosionY = trashesB.get(i).trashBY;
+                        explosions.add(explosion);*/
+
+                        trashNow.resetPosition();
+                    }
+                    //FALTA Si choca con otro bote es life--
+
+                    return true;        //Falta verificar si es posible quitar los trues (Parece que debo dejarlos)
                 }
             }
-
-            //Si choca con bote B es points++
-            if (trashNow.trashBX + trashNow.getTrashWidth()>=dumpsterBX
-                    && trashNow.trashBX <= dumpsterBX + dumpsterB.getWidth()
-                    && trashNow.trashBY + trashNow.getTrashWidth()>=dumpstersY
-                    && trashNow.trashBY + trashNow.getTrashWidth()<=dumpstersY + dumpsterB.getHeight()){
-                points +=10;
-                //Codigo para meter explosiones
-/*                Explosion explosion = new Explosion(context);
-                explosion.explosionX = trashesB.get(i).trashBX;
-                explosion.explosionY = trashesB.get(i).trashBY;
-                explosions.add(explosion);*/
-
-                trashNow.resetPosition();
-            }
-            //FALTA PONER COLISIONES PARA DEMAS BOTES
         }
-
-        // Mover botes (ya no es necesario)
-/*        if (touchY >= dumpstersY) {
-            // Verificar accion
-            action = event.getAction();
-            // Si la acción es estar presionando la pantalla
-            if (action == MotionEvent.ACTION_DOWN) {
-                // Obtener el toque del dedo en X
-                trashNow.oldX = event.getX();
-                // Obtener posición del cubo de basura
-                olddumpsterBX = dumpsterBX;
-            }
-            // Si la acción es mover la pantalla
-            if (action == MotionEvent.ACTION_MOVE) {
-                // Calcular shift en base al toque
-                shift = trashNow.oldX - touchX;
-                float newdumpsterBX = olddumpsterBX - shift;
-                // Mover bote
-                if (newdumpsterBX <= 0)
-                    dumpsterBX = 0;
-                else if (newdumpsterBX >= dWidth - dumpsterB.getWidth())
-                    dumpsterBX = dWidth - dumpsterB.getWidth();
-                else
-                    dumpsterBX = newdumpsterBX;
-            }
-        }*/
         return true;
     }
 }
