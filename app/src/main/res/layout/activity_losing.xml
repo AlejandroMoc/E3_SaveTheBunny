@@ -34,9 +34,9 @@
         android:layout_width="260dp"
         android:layout_height="75dp"
         android:layout_marginTop="60dp"
-        android:background="@drawable/gradient_winning2"
+        android:background="@drawable/gradient_losing2"
         android:contentDescription="@string/bas_levelSel"
-        android:text="@string/winning_dialog"
+        android:text="@string/losing_dialog"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -47,9 +47,9 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonBasic"
         android:layout_width="180dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:background="@drawable/gradient_winning1"
+        android:background="@drawable/gradient_losing1"
         android:contentDescription="@string/bas_levelSel"
         android:text="@string/basicLevel"
         android:textColor="@color/white"
@@ -68,6 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backgroundImageView"
-        app:srcCompat="@drawable/winning_decoration" />
+        app:srcCompat="@drawable/losing_decoration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

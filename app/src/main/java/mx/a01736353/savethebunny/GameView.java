@@ -55,6 +55,7 @@ public class GameView extends View {
         dumpsterB = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_2);
         dumpsterC = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_3);
         dumpsterD = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_4);
+
         //Falta redimensionar para cuatro botes
         //dumpsterB = Bitmap.createScaledBitmap(dumpsterB, dumpsterB.getWidth()-dumpsterB.getWidth()/3, dumpsterB.getHeight()-dumpsterB.getHeight()/3, true);
 
@@ -118,7 +119,6 @@ public class GameView extends View {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
 
-        //Falta checar si no imprime 20 veces la pantalla de gameOver
         //Checar si es gameOver
         setGameOver();
 
@@ -196,7 +196,7 @@ public class GameView extends View {
         return true;
     }
 
-    //Funciones para colisiones
+    //Funciones colisiones
     private void movementCollision(MotionEvent event, ArrayList<Trash> trashy) {
         for (Trash trashNow : trashy) {
 

@@ -56,6 +56,7 @@ public class Trash {
         trashVelocity = 4 + random.nextInt(4);
 
         //Aleatorizar gráfico de acuerdo con el tipo
+        //AQUI AHORA falta colapsar esto para usar un solo valor +algo
         if (trashType == 1){
             trashFrame = new Random().nextInt(3);
         } else if (trashType == 2){

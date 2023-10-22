@@ -1,6 +1,5 @@
 package mx.a01736353.savethebunny;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ public class GameOver extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ImageView ivNewHighest;
     int winningState, points;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,17 +31,17 @@ public class GameOver extends AppCompatActivity {
         points = Objects.requireNonNull(getIntent().getExtras()).getInt("points");
         winningState = Objects.requireNonNull(getIntent().getExtras()).getInt("winningState");
 
-        tvPoints.setText(""+points);
+        tvPoints.setText(" "+points);
         sharedPreferences=getSharedPreferences("my_pref",0);
         int highest = sharedPreferences.getInt("highest",0);
 
-        //Comparar con maayor puntuación
+        //Comparar con mayor puntuación
         if (points > highest){
             ivNewHighest.setVisibility(View.VISIBLE);
             highest=points;
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("highest",highest);
-            editor.commit();
+            editor.apply();
         }
         tvHighest.setText("  "+highest);
     }
@@ -54,30 +52,19 @@ public class GameOver extends AppCompatActivity {
         finish();
     }
 
-    //Seguramente se tenga que pasar el caracter tambien aqui
-/*    public void goToWinningState(View v){
-
-        //Dependiendo de si se ganó o perdió, pasar a distinta pantalla
-        Intent intent = new Intent(this, TutorialActivity.class);
-        startActivity(intent);
-    }*/
-
-    //AQUI AHORA FALTA CREAR SITUACION DE FRACASO
     public void goToWinningState(View v){
         Intent intent;
-        if (winningState==0){
-            //Falta anexar información
-            intent = new Intent(this, WinningActivity.class);
-        } else {
-            intent = new Intent(this, WinningActivity.class);
-        }
+        intent = new Intent(this, WinningActivity.class);
+        intent.putExtra("winningState", winningState);
         startActivity(intent);
     }
 
-    //BORRAR, SOLO PARA TENERLO DE REFERENCIA
+    //AQUI AHORA VERIFICAR SI ES NECESARIO PASAR EL CONTEXTO (YO CREO QUE YA NO)
 /*    if(life==0){
         if(points >= minPoints){winningState=1;}
         else{winningState=0;}
+
+
         Intent intent = new Intent(context, GameOver.class);
         intent.putExtra("points", points);
         intent.putExtra("winningState", winningState);

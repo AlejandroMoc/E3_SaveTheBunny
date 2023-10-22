@@ -1,6 +1,5 @@
 package mx.a01736353.savethebunny;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -120,8 +119,5 @@ public class TutorialActivity extends AppCompatActivity {
         GameView gameView = new GameView(this);
         setContentView(gameView);
     }
-
-
-
 
 }
