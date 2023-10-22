@@ -60,17 +60,12 @@ public class GameOver extends AppCompatActivity {
     }
 
     //AQUI AHORA VERIFICAR SI ES NECESARIO PASAR EL CONTEXTO (YO CREO QUE YA NO)
-/*    if(life==0){
-        if(points >= minPoints){winningState=1;}
-        else{winningState=0;}
-
-
+/*
         Intent intent = new Intent(context, GameOver.class);
         intent.putExtra("points", points);
         intent.putExtra("winningState", winningState);
         ((Activity)context).finish();
         context.startActivity(intent);
-        gameOver=true;
     }*/
 
 

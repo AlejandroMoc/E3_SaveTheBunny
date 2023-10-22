@@ -30,27 +30,25 @@
 
     <!--Parte de basic tutorial-->
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/state"
+        android:id="@+id/stateDescription"
         android:layout_width="260dp"
         android:layout_height="75dp"
         android:layout_marginTop="60dp"
         android:background="@drawable/gradient_losing2"
-        android:contentDescription="@string/bas_levelSel"
         android:text="@string/losing_dialog"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonBasic" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLevel" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonBasic"
+        android:id="@+id/buttonLevel"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:background="@drawable/gradient_losing1"
-        android:contentDescription="@string/bas_levelSel"
         android:text="@string/basicLevel"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -64,10 +62,11 @@
         android:id="@+id/imageDecoration"
         android:layout_width="300dp"
         android:layout_height="500dp"
-        android:layout_marginTop="400dp"
+        android:layout_marginBottom="-150dp"
+        android:contentDescription="@string/losing_picture"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/backgroundImageView"
         app:srcCompat="@drawable/losing_decoration" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

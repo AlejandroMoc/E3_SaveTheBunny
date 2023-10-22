@@ -71,6 +71,8 @@
 
     <string name="winning_dialog">¡Limpiaste\nel mundo!</string>
     <string name="losing_dialog">¡Se contaminó el mundo!</string>
+    <string name="winning_picture">Planeta sano</string>
+    <string name="losing_picture">Planeta enfermo</string>
 
 
 </resources>

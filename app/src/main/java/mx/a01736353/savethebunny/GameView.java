@@ -19,25 +19,59 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameView extends View {
-    Bitmap background, ground, dumpsterA, dumpsterB, dumpsterC, dumpsterD, heart;
-    Rect rectBackground, rectGround, rectHeart;
-    Drawable heartDrawable = ContextCompat.getDrawable(getContext(), R.drawable.logo_heart);
-    Context context;
-    Handler handler;
+    final Bitmap background;
+    final Bitmap ground;
+    final Bitmap dumpsterA;
+    final Bitmap dumpsterB;
+    final Bitmap dumpsterC;
+    final Bitmap dumpsterD;
+    final Bitmap heart;
+    final Rect rectBackground;
+    final Rect rectGround;
+    final Rect rectHeart;
+    final Drawable heartDrawable = ContextCompat.getDrawable(getContext(), R.drawable.logo_heart);
+    final Context context;
+    final Handler handler;
     final long UPDATE_MILLIS = 30;
-    Runnable runnable;
-    Paint pointsNumber = new Paint(), lifeNumber = new Paint();
+    final Runnable runnable;
+    final Paint pointsNumber = new Paint();
+    final Paint lifeNumber = new Paint();
     //Falta verificar cuáles deben ser float y cuáles int
-    float pointsTextSize = 120, lifeTextSize = 70, dumpsterAX, dumpsterBX, dumpsterCX, dumpsterDX, dumpstersY, newtrashyX, newtrashyY, touchX, touchY, dumpsterX;
-    int points, winningState, minPoints = 500, life = 5, trashDensity=2, action, i, trashType;
-    static int dWidth, dHeight, heartSize=120, heartMargin=100;
+    final float pointsTextSize = 120;
+    final float lifeTextSize = 70;
+    final float dumpsterAX;
+    final float dumpsterBX;
+    final float dumpsterCX;
+    final float dumpsterDX;
+    final float dumpstersY;
+    float newtrashyX;
+    float newtrashyY;
+    float touchX;
+    float touchY;
+    float dumpsterX;
+    int points;
+    int winningState;
+    final int minPoints = 500;
+    int life = 5;
+    final int trashDensity=2;
+    int action;
+    int i;
+    int trashType;
+    static int dWidth;
+    static int dHeight;
+    static final int heartSize=120;
+    static final int heartMargin=100;
     boolean gameOver = false;
-    Random random;
-    ArrayList<Trash> trashesA, trashesB, trashesC, trashesD;
-    ArrayList<Explosion> explosions;
+    final Random random;
+    final ArrayList<Trash> trashesA;
+    final ArrayList<Trash> trashesB;
+    final ArrayList<Trash> trashesC;
+    final ArrayList<Trash> trashesD;
+    final ArrayList<Explosion> explosions;
     Explosion explosion;
     Trash trash;
     Iterator<Explosion> iterator;
@@ -83,7 +117,7 @@ public class GameView extends View {
         lifeNumber.setTextAlign(Paint.Align.LEFT);
         lifeNumber.setTypeface(Typeface.DEFAULT_BOLD);
 
-        heartDrawable.setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
+        Objects.requireNonNull(heartDrawable).setBounds(rectHeart.left, rectHeart.top, rectHeart.left + rectHeart.width(), rectHeart.top + rectHeart.height());
         heartDrawable.setBounds(dWidth - heartSize - heartMargin, heartMargin, dWidth - heartMargin, heartMargin + heartSize);
 
         random = new Random();
@@ -250,7 +284,10 @@ public class GameView extends View {
                         dumpsterCollision(trashNow, dumpsterC, true);
                     } else if (trashType==4){
 
-                        //Bote correcto D
+                        //Falta Bote correcto D
+                        dumpsterCollision(trashNow, dumpsterA, false);
+                        dumpsterCollision(trashNow, dumpsterB, false);
+                        dumpsterCollision(trashNow, dumpsterC, false);
 
                     }
 

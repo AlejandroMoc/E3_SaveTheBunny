@@ -7,9 +7,9 @@ import android.graphics.BitmapFactory;
 import java.util.Random;
 
 public class Trash {
-    public int trashTypeMine;
-    Bitmap[] trash =new Bitmap[9];
-    Random random = new Random();
+    public final int trashTypeMine;
+    final Bitmap[] trash =new Bitmap[9];
+    final Random random = new Random();
     int trashFrame;
     float trashX, trashY, trashVelocity, oldTrashX, oldTrashY, oldX, oldY, shifX, shiftY;
 
