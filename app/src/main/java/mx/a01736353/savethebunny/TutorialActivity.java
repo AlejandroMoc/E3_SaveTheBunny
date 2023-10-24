@@ -16,12 +16,14 @@ import java.util.Objects;
 
 public class TutorialActivity extends AppCompatActivity {
 
+    int levelNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Variables pasadas
-        int levelNumber = getIntent().getIntExtra("levelNumber", 0);
+        levelNumber = getIntent().getIntExtra("levelNumber", 0);
 
         //BORRAR ESTO CUANDO SE PASE AL CODIGO FINAL
         levelNumber = 1;
@@ -114,7 +116,7 @@ public class TutorialActivity extends AppCompatActivity {
     }
 
     //Mandar a respectivos niveles
-    public void playLevel_basic(View view) {
+    public void playLevel(View view) {
         Log.d("1", "Se envia a nivel básico");
         GameView gameView = new GameView(this);
         setContentView(gameView);
