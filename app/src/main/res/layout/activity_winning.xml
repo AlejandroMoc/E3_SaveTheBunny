@@ -15,6 +15,18 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/background" />
 
+    <!--Imágen de decoración-->
+    <ImageView
+        android:id="@+id/imageDecoration"
+        android:layout_width="300dp"
+        android:layout_height="500dp"
+        android:layout_marginBottom="-150dp"
+        android:contentDescription="@string/winning_picture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/decoration_winning" />
+
     <!--Botón de Siguiente-->
     <Button
         android:id="@+id/levelName"
@@ -28,21 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Parte de basic tutorial-->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/stateDescription"
-        android:layout_width="260dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/gradient_winning2"
-        android:text="@string/winning_dialog"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLevel" />
-
+    <!--Nivel-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLevel"
         android:layout_width="180dp"
@@ -57,16 +55,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backgroundImageView" />
 
-    <!--Imágen de decoración-->
-    <ImageView
-        android:id="@+id/imageDecoration"
-        android:layout_width="300dp"
-        android:layout_height="500dp"
-        android:layout_marginBottom="-150dp"
-        android:contentDescription="@string/winning_picture"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!--Tip-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stateDescription"
+        android:layout_width="260dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/gradient_winning2"
+        android:text="@string/winning_dialog"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/decoration_winning" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLevel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

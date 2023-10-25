@@ -16,6 +16,8 @@
         android:contentDescription="@string/background" />
 
     <!--Imágen de decoración-->
+
+    <!--Botón de Siguiente-->
     <ImageView
         android:id="@+id/imageDecoration"
         android:layout_width="300dp"
@@ -24,10 +26,10 @@
         android:contentDescription="@string/losing_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/decoration_losing" />
 
-    <!--Botón de Siguiente-->
     <Button
         android:id="@+id/levelName"
         android:layout_width="50dp"
@@ -40,26 +42,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Estado del juego-->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/stateDescription"
-        android:layout_width="260dp"
-        android:layout_height="75dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/gradient_losing2"
-        android:text="@string/losing_dialog"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLevel" />
-
     <!--Nivel-->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLevel"
         android:layout_width="180dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="150dp"
         android:background="@drawable/gradient_losing1"
         android:text="@string/basicLevel"
@@ -70,4 +57,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/backgroundImageView" />
 
+    <!--Tip-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stateDescription"
+        android:layout_width="260dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/gradient_losing2"
+        android:text="@string/losing_tip"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLevel" />
+
+    <!--Botones-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonGo"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/gradient_winning1"
+        android:text="@string/dialog_go"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stateDescription" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonQuit"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/gradient_losing1"
+        android:text="@string/dialog_quit"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
