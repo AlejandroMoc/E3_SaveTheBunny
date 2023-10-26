@@ -90,7 +90,7 @@ public class GameView extends View {
         dumpsterC = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_3);
         dumpsterD = BitmapFactory.decodeResource(getResources(), R.drawable.trashcan_4);
 
-        //Falta redimensionar para cuatro botes
+        //Falta aqui redimensionar para cuatro botes
         //dumpsterB = Bitmap.createScaledBitmap(dumpsterB, dumpsterB.getWidth()-dumpsterB.getWidth()/3, dumpsterB.getHeight()-dumpsterB.getHeight()/3, true);
 
         Display display = ((Activity) getContext()).getWindowManager().getDefaultDisplay();
@@ -216,6 +216,7 @@ public class GameView extends View {
         }
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Obtener toque
@@ -334,6 +335,5 @@ public class GameView extends View {
             explosions.add(explosion);
             trashy.get(i).resetTrash(trashy.get(i).trashTypeMine);
         }
-
     }
 }

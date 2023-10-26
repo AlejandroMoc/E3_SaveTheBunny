@@ -77,5 +77,7 @@
     <string name="winning_tip1">¿Sabías que únicamente el 9% de los residuos se reciclan en México?</string>
     <string name="losing_tip">No obstante nunca es tarde para cambiar el mundo real. ¿Te gustaría volver a intentarlo?</string>
     <string name="dialog_go">Let\'s go!</string>
+    <string name="space">" "</string>
+    <string name="trophy">Trofeo</string>
 
 </resources>
